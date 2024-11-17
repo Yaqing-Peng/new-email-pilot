@@ -2,6 +2,7 @@ import { addAutoWriteButton } from './auto-write.js';
 import { addSummarizeButton } from './summarize.js';
 import { addPolishButton } from './polish.js';
 import { addCreateSubjectButton } from './subject.js';
+import { addAutoReplyButton } from './auto-reply.js';
 
 // Initialize MutationObserver to watch for new compose windows or email details
 const observer = new MutationObserver((mutations) => {
@@ -9,9 +10,12 @@ const observer = new MutationObserver((mutations) => {
         const subjectArea = document.querySelector('input[name="subjectbox"]');
         const subjectElement = document.querySelector("h2.hP");
         const bodyInput = document.querySelector('.Am.Al.editable');
+        const replyArea = document.querySelector('form[class="bAs"]');
+        //This element is to differentiate new message window and reply window
+        const newMsgEl = document.querySelector('div[class="aYF"]');
 
         // Check for compose window to add auto-write button
-        if (subjectArea && !document.querySelector("#autoWriteButton")) {
+        if (newMsgEl && subjectArea && !document.querySelector("#autoWriteButton")) {
             console.log("Compose window detected. Adding auto-write button...");
             addAutoWriteButton(subjectArea);
         }
@@ -22,17 +26,24 @@ const observer = new MutationObserver((mutations) => {
             addSummarizeButton(subjectElement);
         }
 
-        // Check for email detail view to add polish button
-        if (subjectArea && !document.querySelector("#polishButton")) {
+        // Check for compose window to add polish button
+        if (newMsgEl && subjectArea && !document.querySelector("#polishButton")) {
             console.log("Compose window detected. Adding polish button...");
             addPolishButton(subjectArea);
         }
 
-        // Check for email detail view to add create subject button
-        if (subjectArea && bodyInput && !document.querySelector("#create-subject-button")) {
+        // Check for compose window to add create subject button
+        if (newMsgEl && subjectArea && bodyInput && !document.querySelector("#create-subject-button")) {
             console.log("Compose window detected. Adding create subject button...");
             addCreateSubjectButton(subjectArea, bodyInput);
         }
+
+        // Check for reply window to add auto reply button
+        if (!newMsgEl && replyArea && bodyInput && !document.querySelector("#autoReplyButton")) {
+            console.log("Compose window detected. Adding auto reply button...");
+            addAutoReplyButton(replyArea, bodyInput);
+        }
+
     });
 });
 
