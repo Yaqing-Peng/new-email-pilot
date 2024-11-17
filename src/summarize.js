@@ -24,11 +24,13 @@ export function addSummarizeButton(subjectElement) {
             return;
         }
 
+        // 显示 "正在总结" 的弹窗
+        const popup = showSummaryPopup("Summarizing...");
+
         // 构建 prompt，并使用 callAIPromptAPI 调用 API
         const prompt = `Summarize the following email content in 100 words or less:\n\n${emailContent}`;
         console.log("Generated Prompt:", prompt); 
         let summary = await callAIPromptAPI(prompt); // 使用通用 API 调用函数
-        //console.log("Generated Summary:", summary); // 输出到控制台
 
         if (summary && summary.trim() !== "") {
             showSummaryPopup(summary);
