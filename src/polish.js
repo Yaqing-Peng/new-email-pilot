@@ -1,4 +1,4 @@
-import { callAIPromptAPI } from './prompt-api.js';
+import { callAIPromptAPI } from "./prompt-api.js";
 
 export function addPolishButton(subjectArea) {
   console.log("Creating polish button...");
@@ -7,7 +7,7 @@ export function addPolishButton(subjectArea) {
   const polishButton = document.createElement("button");
   polishButton.id = "polishButton";
   polishButton.textContent = "Polish Text";
-  polishButton.style.margin = "10px";
+  polishButton.style.marginLeft = "10px";
 
   // Insert button next to the subject area
   subjectArea.insertAdjacentElement("afterend", polishButton);
@@ -36,35 +36,71 @@ function openPromptPopup() {
   popupDiv.style.zIndex = "1000";
   popupDiv.style.width = "400px"; // Set width for consistent styling
 
+  // Add a title bar for dragging
+  const titleBar = document.createElement("div");
+  titleBar.style.backgroundColor = "#007bff";
+  titleBar.style.color = "white";
+  titleBar.style.padding = "10px";
+  titleBar.style.marginBottom = "10px";
+  titleBar.style.cursor = "move"; // Indicate draggable area
+  titleBar.style.fontWeight = "bold";
+  titleBar.style.display = "flex"; // Use flexbox for alignment
+  titleBar.style.justifyContent = "space-between"; // Space between title and button
+
+  const titleText = document.createElement("span");
+  titleText.textContent = "Polish Email Popup";
+  titleBar.appendChild(titleText);
+
+  // Add the "X" button to the title bar
+  const titleCloseButton = document.createElement("button");
+  titleCloseButton.textContent = "X";
+  titleCloseButton.style.background = "none";
+  titleCloseButton.style.border = "none";
+  titleCloseButton.style.color = "white";
+  titleCloseButton.style.fontSize = "16px";
+  titleCloseButton.style.cursor = "pointer";
+  titleCloseButton.style.marginLeft = "10px";
+
+  titleCloseButton.addEventListener("click", () => {
+    document.body.removeChild(popupDiv);
+  });
+  titleBar.appendChild(titleCloseButton);
+
+  popupDiv.appendChild(titleBar);
+
   const styleLabel = document.createElement("p");
+  styleLabel.margin = "10px";
+
   styleLabel.textContent = "Choose a style for the email:";
   popupDiv.appendChild(styleLabel);
 
   const styleOptions = ["Professional", "Friendly", "Concise"];
   let selectedStyle = "Professional"; // Default style
-  let selectedStyleMessage = document.createElement("p");
-  selectedStyleMessage.style.marginTop = "10px";
-  selectedStyleMessage.style.fontStyle = "italic";
-  selectedStyleMessage.textContent = `Selected style: ${selectedStyle}`;
-  popupDiv.appendChild(selectedStyleMessage);
 
   // Create buttons for each style
   styleOptions.forEach((style) => {
     const styleButton = document.createElement("button");
     styleButton.textContent = style;
-    styleButton.style.margin = "5px";
+    styleButton.style.margin = "10px";
+    styleButton.style.marginTop = "0px";
+
+    // Set initial styles for the default selected button
+    if (style === selectedStyle) {
+      styleButton.style.backgroundColor = "#007bff";
+      styleButton.style.color = "white";
+    }
 
     styleButton.addEventListener("click", () => {
       selectedStyle = style;
 
       // Highlight the selected button and reset others
       Array.from(popupDiv.querySelectorAll("button")).forEach((btn) => {
-        btn.style.backgroundColor = btn.textContent === style ? "#007bff" : "";
-        btn.style.color = btn.textContent === style ? "white" : "";
+        btn.style.backgroundColor =
+          btn.textContent === selectedStyle ? "#007bff" : "";
+        btn.style.color = btn.textContent === selectedStyle ? "white" : "";
       });
 
       // Update feedback message
-      selectedStyleMessage.textContent = `Selected style: ${selectedStyle}`;
       console.log(`Selected style: ${selectedStyle}`);
     });
 
@@ -84,12 +120,6 @@ function openPromptPopup() {
   generateButton.style.marginTop = "10px";
   popupDiv.appendChild(generateButton);
 
-  const closeButton = document.createElement("button");
-  closeButton.textContent = "Close";
-  closeButton.style.marginLeft = "10px";
-  closeButton.style.marginTop = "10px";
-  popupDiv.appendChild(closeButton);
-
   const resultTextarea = document.createElement("textarea");
   resultTextarea.id = "polishedResult";
   resultTextarea.style.width = "100%";
@@ -98,10 +128,16 @@ function openPromptPopup() {
   resultTextarea.readOnly = true;
   popupDiv.appendChild(resultTextarea);
 
-  const copyButton = document.createElement("button");
-  copyButton.textContent = "Copy Polished Text";
-  copyButton.style.marginTop = "10px";
-  popupDiv.appendChild(copyButton);
+  const insertButton = document.createElement("button");
+  insertButton.textContent = "Insert Polished Text";
+  insertButton.style.marginTop = "10px";
+  popupDiv.appendChild(insertButton);
+
+  const closeButton = document.createElement("button");
+  closeButton.textContent = "Close";
+  closeButton.style.marginLeft = "10px";
+  closeButton.style.marginTop = "10px";
+  popupDiv.appendChild(closeButton);
 
   document.body.appendChild(popupDiv);
 
@@ -114,7 +150,7 @@ function openPromptPopup() {
     if (emailBodyArea) {
       const existingText = emailBodyArea.innerText;
       const prompt = `
-        Please polish the following email content in a ${selectedStyle.toLowerCase()} style for clarity and professionalism. Return a single, complete email template, without repeating sections, and ensure it is ready to be sent. Do not include extra notes, suggestions, or alternative templates.
+        Please polish the following email content in a ${selectedStyle.toLowerCase()} style for clarity and professionalism. Return a single email template, without repeating sections, and ensure it is ready to be sent. Do not include a subject line. Do not include extra notes, suggestions, or alternative templates.
         ${userInput ? "Additional instructions: " + userInput : ""}
         ${existingText}
         `;
@@ -124,20 +160,56 @@ function openPromptPopup() {
 
       // Call the API to polish the existing text without streaming
       const polishedText = await callAIPromptAPI(prompt);
-      resultTextarea.value = polishedText || "Error generating polished text.";
+      resultTextarea.value =
+        polishedText.replace(/^Subject:.*$/m, "").trim() ||
+        "Error generating polished text.";
     } else {
       resultTextarea.value = "No text found in the email body area.";
     }
   });
 
-  copyButton.addEventListener("click", () => {
-    resultTextarea.select();
-    document.execCommand("copy");
-    alert("Polished text copied to clipboard!");
+  insertButton.addEventListener("click", () => {
+    const emailBodyArea = document.querySelector(
+      "div[aria-label='Message Body']"
+    );
+    if (emailBodyArea) {
+      // Insert the polished text into the email body area
+      emailBodyArea.innerText = resultTextarea.value;
+
+      // Clear out the polished text area
+      resultTextarea.value = "";
+
+      alert("Polished text inserted into the email body!");
+    } else {
+      alert("No email body area found to insert the text.");
+    }
   });
 
   closeButton.addEventListener("click", () => {
     document.body.removeChild(popupDiv);
   });
-}
 
+  // Implement dragging functionality
+  let isDragging = false;
+  let offsetX = 0;
+  let offsetY = 0;
+
+  titleBar.addEventListener("mousedown", (e) => {
+    isDragging = true;
+    offsetX = e.clientX - popupDiv.getBoundingClientRect().left;
+    offsetY = e.clientY - popupDiv.getBoundingClientRect().top;
+    popupDiv.style.transition = "none"; // Disable smooth movement during drag
+  });
+
+  document.addEventListener("mousemove", (e) => {
+    if (isDragging) {
+      popupDiv.style.left = `${e.clientX - offsetX}px`;
+      popupDiv.style.top = `${e.clientY - offsetY}px`;
+      popupDiv.style.transform = "none"; // Remove initial centering transform
+    }
+  });
+
+  document.addEventListener("mouseup", () => {
+    isDragging = false;
+  });
+}
