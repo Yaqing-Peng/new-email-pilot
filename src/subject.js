@@ -25,14 +25,14 @@ export function addCreateSubjectButton(subjectInput, bodyInput) {
     // Create "<" button
     const prevButton = document.createElement('button');
     prevButton.id = "prev-button";
-    prevButton.innerText = 'prev';
+    prevButton.innerText = '<';
     console.log("Previous button created.");
     prevButton.style.cursor = 'pointer';
 
     // Create ">" button
     const nextButton = document.createElement('button');
     nextButton.id = "next-button";
-    nextButton.innerText = 'next';
+    nextButton.innerText = '>';
     console.log("Next button created.");
     nextButton.style.cursor = 'pointer';
 
@@ -49,18 +49,31 @@ export function addCreateSubjectButton(subjectInput, bodyInput) {
     createButton.addEventListener('click', async () => {
         console.log("Generating subject...");
         const bodyText = bodyInput.innerText;
-        const prompt = `Generate three subject lines for this email content:\n\n${bodyText}\n\nOnly return the subject lines, separated by new lines.`;
-        console.log("Prompt:", prompt);
-    
-        const result = await callAIPromptAPI(prompt); // Generate and store subjects
-        const subjectOptions = result.split('\n').slice(0, 3);// Split and return only the first three subjects
-        currentIndex = 0; // Reset index to the first subject
 
-        if (subjectOptions.length > 0) {
-            subjectInput.value = subjectOptions[currentIndex]; // Display the first subject
-        } else {
-            console.error("Failed to generate subject options.");
-            subjectInput.value = "No subject generated.";
+        // Show "Generating subject lines..." in subject line
+        subjectInput.value = "Generating subject lines...";
+
+        const prompt = `Write three email subject lines in English based on the following email content. Do not attempt to interpret or modify any technical terms, abbreviations, or acronyms. Treat them as is. Email content:\n\n${bodyText}\n\nOnly return the subject lines, separated by new lines.`;
+        console.log("Prompt:", prompt);
+
+        try {
+            const result = await callAIPromptAPI(prompt);
+            subjectOptions = result
+                .split('\n') // Split by new lines
+                .map(subject => subject.trim()) // Remove extra spaces
+                .filter(subject => subject !== ""); // Remove empty entries
+            currentIndex = 0; // Reset index to the first subject
+
+            if (subjectOptions.length > 0) {
+                subjectInput.value = subjectOptions[currentIndex]; // Display the first subject
+                console.log("Generated subjects:", subjectOptions);
+            } else {
+                console.error("No valid subjects generated.");
+                subjectInput.value = "No subject generated.";
+            }
+        } catch (error) {
+            console.error("Error generating subjects:", error);
+            subjectInput.value = "Error occurred while generating subjects.";
         }
     });
 
@@ -69,8 +82,10 @@ export function addCreateSubjectButton(subjectInput, bodyInput) {
         console.log("Previous button clicked.");
         if (subjectOptions.length > 0) {
             currentIndex = (currentIndex - 1 + subjectOptions.length) % subjectOptions.length; // Loop back to last if at first
+            console.log("Current Index:", currentIndex, "Subject:", subjectOptions[currentIndex]);
             subjectInput.value = subjectOptions[currentIndex];
-            console.log("Previous subject:", subjectInput.value);
+        } else {
+            console.error("No subject options available.");
         }
     });
 
@@ -78,8 +93,10 @@ export function addCreateSubjectButton(subjectInput, bodyInput) {
         console.log("Next button clicked.");
         if (subjectOptions.length > 0) {
             currentIndex = (currentIndex + 1) % subjectOptions.length; // Loop to first if at last
+            console.log("Current Index:", currentIndex, "Subject:", subjectOptions[currentIndex]);
             subjectInput.value = subjectOptions[currentIndex];
-            console.log("Next subject:", subjectInput.value);
+        } else {
+            console.error("No subject options available.");
         }
     });
 }
