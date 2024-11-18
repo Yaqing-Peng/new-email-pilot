@@ -14,7 +14,7 @@ export function addSummarizeButton(subjectElement) {
     summarizeButton.style.color = "#fff";
     summarizeButton.style.border = "none";
     summarizeButton.style.borderRadius = "4px";
-    
+
     subjectElement.insertAdjacentElement("afterend", summarizeButton);
 
     summarizeButton.addEventListener("click", async () => {
@@ -24,44 +24,53 @@ export function addSummarizeButton(subjectElement) {
             return;
         }
 
-        // 显示 "正在总结" 的弹窗
-        const popup = showSummaryPopup("Summarizing...");
+        // 如果弹窗已经存在，直接切换到 "Loading..." 状态
+        const existingPopup = document.querySelector("#summary-popup");
+        if (existingPopup) {
+            updatePopupContent("Summarizing...");
+        } else {
+            // 如果弹窗不存在，创建一个新的
+            showSummaryPopup("Summarizing...");
+        }
 
         // 构建 prompt，并使用 callAIPromptAPI 调用 API
         const prompt = `Summarize the following email content in 100 words or less:\n\n${emailContent}`;
-        console.log("Generated Prompt:", prompt); 
-        let summary = await callAIPromptAPI(prompt); // 使用通用 API 调用函数
+        console.log("Generated Prompt:", prompt);
+        try {
+            let summary = await callAIPromptAPI(prompt); // 使用通用 API 调用函数
 
-        if (summary && summary.trim() !== "") {
-            showSummaryPopup(summary);
-        } else {
-            console.error("Failed to generate summary or summary is empty.");
+            if (summary && summary.trim() !== "") {
+                updatePopupContent(summary); // 更新文本内容为实际摘要
+            } else {
+                console.error("Failed to generate summary or summary is empty.");
+                updatePopupContent("Failed to generate a summary. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error generating summary:", error);
+            updatePopupContent("An error occurred while generating the summary.");
         }
     });
 }
 
 // 获取邮件内容并清理
 function getEmailContent() {
-    // 选择包含邮件正文的主要元素（
-    const emailBodyContainer = document.querySelector(".ii.gt"); 
+    const emailBodyContainer = document.querySelector(".ii.gt");
     let emailContent = "";
 
     if (emailBodyContainer) {
-        // 提取正文内容并清理多余的空白字符
         emailContent = emailBodyContainer.innerText.trim();
     } else {
         console.error("Unable to find the email content container.");
         return "";
     }
 
-    // 清理非英文字符和多余的内容，限制长度
     return emailContent.replace(/[^\x00-\x7F]/g, " ").slice(0, 1000);
 }
 
-
-// 弹出窗口显示摘要内容
-function showSummaryPopup(summary) {
+// 显示弹出窗口
+function showSummaryPopup(initialContent) {
     const popup = document.createElement("div");
+    popup.id = "summary-popup"; // 给弹窗添加唯一 ID，便于复用
     popup.style.position = "fixed";
     popup.style.top = "50%";
     popup.style.left = "50%";
@@ -76,7 +85,7 @@ function showSummaryPopup(summary) {
 
     popup.innerHTML = `
         <h3>Summary</h3>
-        <p>${summary}</p>
+        <p id="summary-content">${initialContent}</p>
         <button id="close-popup" style="margin-top: 10px; padding: 5px 10px; cursor: pointer; background-color: #1a73e8; color: #fff; border: none; border-radius: 4px;">Close</button>
     `;
 
@@ -85,10 +94,13 @@ function showSummaryPopup(summary) {
     // 关闭弹窗
     document.getElementById("close-popup").addEventListener("click", () => {
         popup.remove();
-        // 清理摘要内容
-        summary = ""; // 释放 summary 变量
     });
 }
 
-
-
+// 更新弹窗文本内容
+function updatePopupContent(newContent) {
+    const summaryContent = document.querySelector("#summary-popup #summary-content");
+    if (summaryContent) {
+        summaryContent.innerText = newContent; // 更新内容
+    }
+}
