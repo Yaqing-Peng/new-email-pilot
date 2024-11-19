@@ -11,7 +11,6 @@ export function addPolishButton(subjectArea) {
 
   // Insert button next to the subject area
   subjectArea.insertAdjacentElement("afterend", polishButton);
-
   polishButton.addEventListener("click", openPromptPopup);
 
   // Check if the button is added to the DOM
@@ -31,7 +30,6 @@ function openPromptPopup() {
   popupDiv.style.left = "50%";
   popupDiv.style.transform = "translate(-50%, -50%)";
   popupDiv.style.backgroundColor = "white";
-  popupDiv.style.padding = "20px";
   popupDiv.style.boxShadow = "0 0 10px rgba(0,0,0,0.5)";
   popupDiv.style.zIndex = "1000";
   popupDiv.style.width = "400px"; // Set width for consistent styling
@@ -41,7 +39,6 @@ function openPromptPopup() {
   titleBar.style.backgroundColor = "#007bff";
   titleBar.style.color = "white";
   titleBar.style.padding = "10px";
-  titleBar.style.marginBottom = "10px";
   titleBar.style.cursor = "move"; // Indicate draggable area
   titleBar.style.fontWeight = "bold";
   titleBar.style.display = "flex"; // Use flexbox for alignment
@@ -64,25 +61,37 @@ function openPromptPopup() {
   titleCloseButton.addEventListener("click", () => {
     document.body.removeChild(popupDiv);
   });
-  titleBar.appendChild(titleCloseButton);
 
+  titleBar.appendChild(titleCloseButton);
   popupDiv.appendChild(titleBar);
 
+  const contentDiv = document.createElement("div");
+  contentDiv.style.padding = "20px";
+
   const styleLabel = document.createElement("p");
-  styleLabel.margin = "10px";
+  styleLabel.style.margin = "0px";
 
   styleLabel.textContent = "Choose a style for the email:";
-  popupDiv.appendChild(styleLabel);
+  contentDiv.appendChild(styleLabel);
 
   const styleOptions = ["Professional", "Friendly", "Concise"];
   let selectedStyle = "Professional"; // Default style
 
+  const buttonContainer = document.createElement("div");
+  buttonContainer.style.display = "flex";
+  // buttonContainer.style.padding = "10px";
+  buttonContainer.style.justifyContent = "flex-start"; // Align buttons to the left
+  contentDiv.appendChild(buttonContainer);
+
   // Create buttons for each style
-  styleOptions.forEach((style) => {
+  styleOptions.forEach((style, index) => {
     const styleButton = document.createElement("button");
     styleButton.textContent = style;
     styleButton.style.margin = "10px";
-    styleButton.style.marginTop = "0px";
+    styleButton.style.marginRight =
+      index < styleOptions.length - 1 ? "10px" : "0";
+    styleButton.style.marginLeft = "0";
+    buttonContainer.appendChild(styleButton);
 
     // Set initial styles for the default selected button
     if (style === selectedStyle) {
@@ -94,7 +103,7 @@ function openPromptPopup() {
       selectedStyle = style;
 
       // Highlight the selected button and reset others
-      Array.from(popupDiv.querySelectorAll("button")).forEach((btn) => {
+      Array.from(contentDiv.querySelectorAll("button")).forEach((btn) => {
         btn.style.backgroundColor =
           btn.textContent === selectedStyle ? "#007bff" : "";
         btn.style.color = btn.textContent === selectedStyle ? "white" : "";
@@ -104,7 +113,7 @@ function openPromptPopup() {
       console.log(`Selected style: ${selectedStyle}`);
     });
 
-    popupDiv.appendChild(styleButton);
+    contentDiv.appendChild(styleButton);
   });
 
   const promptInput = document.createElement("textarea");
@@ -113,12 +122,12 @@ function openPromptPopup() {
     "Input additional instructions for polishing the email...";
   promptInput.style.width = "100%";
   promptInput.style.height = "100px";
-  popupDiv.appendChild(promptInput);
+  contentDiv.appendChild(promptInput);
 
   const generateButton = document.createElement("button");
   generateButton.textContent = "Generate Polished Text";
   generateButton.style.marginTop = "10px";
-  popupDiv.appendChild(generateButton);
+  contentDiv.appendChild(generateButton);
 
   const resultTextarea = document.createElement("textarea");
   resultTextarea.id = "polishedResult";
@@ -126,19 +135,20 @@ function openPromptPopup() {
   resultTextarea.style.height = "100px";
   resultTextarea.style.marginTop = "10px";
   resultTextarea.readOnly = true;
-  popupDiv.appendChild(resultTextarea);
+  contentDiv.appendChild(resultTextarea);
 
   const insertButton = document.createElement("button");
   insertButton.textContent = "Insert Polished Text";
   insertButton.style.marginTop = "10px";
-  popupDiv.appendChild(insertButton);
+  contentDiv.appendChild(insertButton);
 
   const closeButton = document.createElement("button");
   closeButton.textContent = "Close";
   closeButton.style.marginLeft = "10px";
   closeButton.style.marginTop = "10px";
-  popupDiv.appendChild(closeButton);
+  contentDiv.appendChild(closeButton);
 
+  popupDiv.appendChild(contentDiv);
   document.body.appendChild(popupDiv);
 
   generateButton.addEventListener("click", async () => {
