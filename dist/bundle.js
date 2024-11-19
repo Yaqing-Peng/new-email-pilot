@@ -270,7 +270,6 @@ function openPromptPopup() {
   popupDiv.style.left = "50%";
   popupDiv.style.transform = "translate(-50%, -50%)";
   popupDiv.style.backgroundColor = "white";
-  popupDiv.style.padding = "20px";
   popupDiv.style.boxShadow = "0 0 10px rgba(0,0,0,0.5)";
   popupDiv.style.zIndex = "1000";
   popupDiv.style.width = "400px"; // Set width for consistent styling
@@ -280,7 +279,6 @@ function openPromptPopup() {
   titleBar.style.backgroundColor = "#007bff";
   titleBar.style.color = "white";
   titleBar.style.padding = "10px";
-  titleBar.style.marginBottom = "10px";
   titleBar.style.cursor = "move"; // Indicate draggable area
   titleBar.style.fontWeight = "bold";
   titleBar.style.display = "flex"; // Use flexbox for alignment
@@ -304,19 +302,29 @@ function openPromptPopup() {
   });
   titleBar.appendChild(titleCloseButton);
   popupDiv.appendChild(titleBar);
+  var contentDiv = document.createElement("div");
+  contentDiv.style.padding = "20px";
   var styleLabel = document.createElement("p");
-  styleLabel.margin = "10px";
+  styleLabel.style.margin = "0px";
   styleLabel.textContent = "Choose a style for the email:";
-  popupDiv.appendChild(styleLabel);
+  contentDiv.appendChild(styleLabel);
   var styleOptions = ["Professional", "Friendly", "Concise"];
   var selectedStyle = "Professional"; // Default style
 
+  var buttonContainer = document.createElement("div");
+  buttonContainer.style.display = "flex";
+  // buttonContainer.style.padding = "10px";
+  buttonContainer.style.justifyContent = "flex-start"; // Align buttons to the left
+  contentDiv.appendChild(buttonContainer);
+
   // Create buttons for each style
-  styleOptions.forEach(function (style) {
+  styleOptions.forEach(function (style, index) {
     var styleButton = document.createElement("button");
     styleButton.textContent = style;
     styleButton.style.margin = "10px";
-    styleButton.style.marginTop = "0px";
+    styleButton.style.marginRight = index < styleOptions.length - 1 ? "10px" : "0";
+    styleButton.style.marginLeft = "0";
+    buttonContainer.appendChild(styleButton);
 
     // Set initial styles for the default selected button
     if (style === selectedStyle) {
@@ -327,7 +335,7 @@ function openPromptPopup() {
       selectedStyle = style;
 
       // Highlight the selected button and reset others
-      Array.from(popupDiv.querySelectorAll("button")).forEach(function (btn) {
+      Array.from(contentDiv.querySelectorAll("button")).forEach(function (btn) {
         btn.style.backgroundColor = btn.textContent === selectedStyle ? "#007bff" : "";
         btn.style.color = btn.textContent === selectedStyle ? "white" : "";
       });
@@ -335,34 +343,35 @@ function openPromptPopup() {
       // Update feedback message
       console.log("Selected style: ".concat(selectedStyle));
     });
-    popupDiv.appendChild(styleButton);
+    contentDiv.appendChild(styleButton);
   });
   var promptInput = document.createElement("textarea");
   promptInput.id = "polishPrompt";
   promptInput.placeholder = "Input additional instructions for polishing the email...";
   promptInput.style.width = "100%";
   promptInput.style.height = "100px";
-  popupDiv.appendChild(promptInput);
+  contentDiv.appendChild(promptInput);
   var generateButton = document.createElement("button");
   generateButton.textContent = "Generate Polished Text";
   generateButton.style.marginTop = "10px";
-  popupDiv.appendChild(generateButton);
+  contentDiv.appendChild(generateButton);
   var resultTextarea = document.createElement("textarea");
   resultTextarea.id = "polishedResult";
   resultTextarea.style.width = "100%";
   resultTextarea.style.height = "100px";
   resultTextarea.style.marginTop = "10px";
   resultTextarea.readOnly = true;
-  popupDiv.appendChild(resultTextarea);
+  contentDiv.appendChild(resultTextarea);
   var insertButton = document.createElement("button");
   insertButton.textContent = "Insert Polished Text";
   insertButton.style.marginTop = "10px";
-  popupDiv.appendChild(insertButton);
+  contentDiv.appendChild(insertButton);
   var closeButton = document.createElement("button");
   closeButton.textContent = "Close";
   closeButton.style.marginLeft = "10px";
   closeButton.style.marginTop = "10px";
-  popupDiv.appendChild(closeButton);
+  contentDiv.appendChild(closeButton);
+  popupDiv.appendChild(contentDiv);
   document.body.appendChild(popupDiv);
   generateButton.addEventListener("click", /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
     var userInput, emailBodyArea, existingText, prompt, polishedText;
@@ -541,14 +550,14 @@ function addCreateSubjectButton(subjectInput, bodyInput) {
   // Create "<" button
   var prevButton = document.createElement('button');
   prevButton.id = "prev-button";
-  prevButton.innerText = 'prev';
+  prevButton.innerText = '<';
   console.log("Previous button created.");
   prevButton.style.cursor = 'pointer';
 
   // Create ">" button
   var nextButton = document.createElement('button');
   nextButton.id = "next-button";
-  nextButton.innerText = 'next';
+  nextButton.innerText = '>';
   console.log("Next button created.");
   nextButton.style.cursor = 'pointer';
 
@@ -563,33 +572,48 @@ function addCreateSubjectButton(subjectInput, bodyInput) {
 
   // Event listener for "Create Subject" button
   createButton.addEventListener('click', /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-    var bodyText, prompt, result, subjectOptions;
+    var bodyText, prompt, result;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           console.log("Generating subject...");
-          bodyText = bodyInput.innerText;
-          prompt = "Generate three subject lines for this email content:\n\n".concat(bodyText, "\n\nOnly return the subject lines, separated by new lines.");
+          bodyText = bodyInput.innerText; // Show "Generating subject lines..." in subject line
+          subjectInput.value = "Generating subject lines...";
+          prompt = "Write three email subject lines in English based on the following email content. Do not attempt to interpret or modify any technical terms, abbreviations, or acronyms. Treat them as is. Email content:\n\n".concat(bodyText, "\n\nOnly return the subject lines, separated by new lines.");
           console.log("Prompt:", prompt);
-          _context.next = 6;
+          _context.prev = 5;
+          _context.next = 8;
           return (0,_prompt_api_js__WEBPACK_IMPORTED_MODULE_0__.callAIPromptAPI)(prompt);
-        case 6:
+        case 8:
           result = _context.sent;
-          // Generate and store subjects
-          subjectOptions = result.split('\n').slice(0, 3); // Split and return only the first three subjects
+          subjectOptions = result.split('\n') // Split by new lines
+          .map(function (subject) {
+            return subject.trim();
+          }) // Remove extra spaces
+          .filter(function (subject) {
+            return subject !== "";
+          }); // Remove empty entries
           currentIndex = 0; // Reset index to the first subject
 
           if (subjectOptions.length > 0) {
             subjectInput.value = subjectOptions[currentIndex]; // Display the first subject
+            console.log("Generated subjects:", subjectOptions);
           } else {
-            console.error("Failed to generate subject options.");
+            console.error("No valid subjects generated.");
             subjectInput.value = "No subject generated.";
           }
-        case 10:
+          _context.next = 18;
+          break;
+        case 14:
+          _context.prev = 14;
+          _context.t0 = _context["catch"](5);
+          console.error("Error generating subjects:", _context.t0);
+          subjectInput.value = "Error occurred while generating subjects.";
+        case 18:
         case "end":
           return _context.stop();
       }
-    }, _callee);
+    }, _callee, null, [[5, 14]]);
   })));
 
   // Event listeners for "<" and ">" buttons
@@ -597,16 +621,20 @@ function addCreateSubjectButton(subjectInput, bodyInput) {
     console.log("Previous button clicked.");
     if (subjectOptions.length > 0) {
       currentIndex = (currentIndex - 1 + subjectOptions.length) % subjectOptions.length; // Loop back to last if at first
+      console.log("Current Index:", currentIndex, "Subject:", subjectOptions[currentIndex]);
       subjectInput.value = subjectOptions[currentIndex];
-      console.log("Previous subject:", subjectInput.value);
+    } else {
+      console.error("No subject options available.");
     }
   });
   nextButton.addEventListener('click', function () {
     console.log("Next button clicked.");
     if (subjectOptions.length > 0) {
       currentIndex = (currentIndex + 1) % subjectOptions.length; // Loop to first if at last
+      console.log("Current Index:", currentIndex, "Subject:", subjectOptions[currentIndex]);
       subjectInput.value = subjectOptions[currentIndex];
-      console.log("Next subject:", subjectInput.value);
+    } else {
+      console.error("No subject options available.");
     }
   });
 }
@@ -645,7 +673,7 @@ function addSummarizeButton(subjectElement) {
   summarizeButton.style.borderRadius = "4px";
   subjectElement.insertAdjacentElement("afterend", summarizeButton);
   summarizeButton.addEventListener("click", /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-    var emailContent, prompt, summary;
+    var emailContent, existingPopup, prompt, summary;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
@@ -657,49 +685,63 @@ function addSummarizeButton(subjectElement) {
           console.error("No email content detected.");
           return _context.abrupt("return");
         case 4:
+          // 如果弹窗已经存在，直接切换到 "Loading..." 状态
+          existingPopup = document.querySelector("#summary-popup");
+          if (existingPopup) {
+            updatePopupContent("Summarizing...");
+          } else {
+            // 如果弹窗不存在，创建一个新的
+            showSummaryPopup("Summarizing...");
+          }
+
           // 构建 prompt，并使用 callAIPromptAPI 调用 API
           prompt = "Summarize the following email content in 100 words or less:\n\n".concat(emailContent);
           console.log("Generated Prompt:", prompt);
-          _context.next = 8;
+          _context.prev = 8;
+          _context.next = 11;
           return (0,_prompt_api_js__WEBPACK_IMPORTED_MODULE_0__.callAIPromptAPI)(prompt);
-        case 8:
+        case 11:
           summary = _context.sent;
           // 使用通用 API 调用函数
-          //console.log("Generated Summary:", summary); // 输出到控制台
 
           if (summary && summary.trim() !== "") {
-            showSummaryPopup(summary);
+            updatePopupContent(summary); // 更新文本内容为实际摘要
           } else {
             console.error("Failed to generate summary or summary is empty.");
+            updatePopupContent("Failed to generate a summary. Please try again.");
           }
-        case 10:
+          _context.next = 19;
+          break;
+        case 15:
+          _context.prev = 15;
+          _context.t0 = _context["catch"](8);
+          console.error("Error generating summary:", _context.t0);
+          updatePopupContent("An error occurred while generating the summary.");
+        case 19:
         case "end":
           return _context.stop();
       }
-    }, _callee);
+    }, _callee, null, [[8, 15]]);
   })));
 }
 
 // 获取邮件内容并清理
 function getEmailContent() {
-  // 选择包含邮件正文的主要元素（
   var emailBodyContainer = document.querySelector(".ii.gt");
   var emailContent = "";
   if (emailBodyContainer) {
-    // 提取正文内容并清理多余的空白字符
     emailContent = emailBodyContainer.innerText.trim();
   } else {
     console.error("Unable to find the email content container.");
     return "";
   }
-
-  // 清理非英文字符和多余的内容，限制长度
   return emailContent.replace(/[^\x00-\x7F]/g, " ").slice(0, 1000);
 }
 
-// 弹出窗口显示摘要内容
-function showSummaryPopup(summary) {
+// 显示弹出窗口
+function showSummaryPopup(initialContent) {
   var popup = document.createElement("div");
+  popup.id = "summary-popup"; // 给弹窗添加唯一 ID，便于复用
   popup.style.position = "fixed";
   popup.style.top = "50%";
   popup.style.left = "50%";
@@ -711,15 +753,21 @@ function showSummaryPopup(summary) {
   popup.style.borderRadius = "8px";
   popup.style.boxShadow = "0px 4px 8px rgba(0, 0, 0, 0.2)";
   popup.style.zIndex = "1000";
-  popup.innerHTML = "\n        <h3>Summary</h3>\n        <p>".concat(summary, "</p>\n        <button id=\"close-popup\" style=\"margin-top: 10px; padding: 5px 10px; cursor: pointer; background-color: #1a73e8; color: #fff; border: none; border-radius: 4px;\">Close</button>\n    ");
+  popup.innerHTML = "\n        <h3>Summary</h3>\n        <p id=\"summary-content\">".concat(initialContent, "</p>\n        <button id=\"close-popup\" style=\"margin-top: 10px; padding: 5px 10px; cursor: pointer; background-color: #1a73e8; color: #fff; border: none; border-radius: 4px;\">Close</button>\n    ");
   document.body.appendChild(popup);
 
   // 关闭弹窗
   document.getElementById("close-popup").addEventListener("click", function () {
     popup.remove();
-    // 清理摘要内容
-    summary = ""; // 释放 summary 变量
   });
+}
+
+// 更新弹窗文本内容
+function updatePopupContent(newContent) {
+  var summaryContent = document.querySelector("#summary-popup #summary-content");
+  if (summaryContent) {
+    summaryContent.innerText = newContent; // 更新内容
+  }
 }
 
 /***/ })
