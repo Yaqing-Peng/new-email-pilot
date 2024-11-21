@@ -30,11 +30,13 @@ function openPromptPopup() {
     // Set innerHTML for content div
     contentDiv.innerHTML = `
       <p style="margin-top: 0px; margin-bottom: 10px;">Choose a style for the email:</p>
-      <div id="buttonContainer" style="display: flex; justify-content: flex-start; margin-bottom: 10px;">
-        <button class="style-button" data-style="Professional" style="margin-right: 10px;">Professional</button>
-        <button class="style-button" data-style="Friendly" style="margin-right: 10px;">Friendly</button>
+      <div id="buttonContainer" style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px;">
+        <button class="style-button" data-style="Professional">Professional</button>
+        <button class="style-button" data-style="Friendly">Friendly</button>
         <button class="style-button" data-style="Concise">Concise</button>
+        <button class="style-button" data-style="Grammar and spelling check only">Grammar & spelling check only</button>
       </div>
+
       <textarea id="polishPrompt" placeholder="Input additional instructions for polishing the email..." style="width: 100%; height: 100px;"></textarea>
       <button id="generateButton" style="margin-top: 10px;">Generate Polished Text</button>
       <textarea id="polishedResult" style="width: 100%; height: 100px; margin-top: 10px;" readonly></textarea>
@@ -94,7 +96,7 @@ function openPromptPopup() {
 
       const existingText = emailBodyArea.innerText;
       const prompt = `
-        Please polish the following email content in a ${selectedStyle.toLowerCase()} style for clarity and professionalism.
+        Please polish the following email content in a ${selectedStyle.toLowerCase()} style.
         Return a single email template, without repeating sections, and ensure it is ready to be sent.
         Do not include a subject line. Do not include extra notes, suggestions, or alternative templates.
         ${userInput ? "Additional instructions: " + userInput : ""}
@@ -172,6 +174,8 @@ function openPromptPopup() {
         buttons: [
           {
             text: "Confirm",
+            color: "white",
+            backgroundColor: "#007bff",
             onClick: (modal) => {
               emailBodyArea.innerText = resultText;
               resultTextarea.value = ""; // Clear the result area
@@ -181,7 +185,7 @@ function openPromptPopup() {
           },
           {
             text: "Cancel",
-            onClick: () => {
+            onClick: (modal) => {
               console.log("Insertion cancelled.");
               document.body.removeChild(modal);
             },

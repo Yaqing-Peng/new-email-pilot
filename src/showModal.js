@@ -18,11 +18,13 @@ export function showModal({ message, buttons }) {
     `;
 
   const buttonContainer = modal.querySelector("#modalButtonContainer");
-  buttons.forEach(({ text, onClick, style = {} }) => {
+  buttons.forEach(({ text, color, backgroundColor, onClick, style = {} }) => {
     const button = document.createElement("button");
     button.textContent = text;
     button.style.margin = "0 5px";
     button.style.padding = "5px 10px";
+    button.style.color = color || "black";
+    button.style.backgroundColor = backgroundColor || ""; // Default color
     Object.assign(button.style, style); // Apply optional styles
     button.addEventListener("click", () => {
       onClick(modal); // Execute button action
