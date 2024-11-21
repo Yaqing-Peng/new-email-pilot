@@ -1,4 +1,5 @@
 import { callAIPromptAPI } from './prompt-api.js';
+import { createPopupDiv } from './popup.js';
 
 console.log("Content script loaded.");
 
@@ -8,47 +9,25 @@ let currentIndex = 0; // Current index in the subject options
 export function addCreateSubjectButton(subjectInput, bodyInput) {
     console.log("Creating buttons...");
 
-    // Create a container for the buttons
-    const buttonContainer = document.createElement('div');
-    buttonContainer.id = "button-container";
-    buttonContainer.style.display = 'inline-flex';
-    buttonContainer.style.gap = '5px'; // Space between buttons
-    console.log("Button container created.");
-
     // Create "Create Subject" button
     const createButton = document.createElement('button');
     createButton.id = "create-subject-button";
     createButton.innerText = 'Create Subject';
-    console.log("Create Subject button created.");
     createButton.style.cursor = 'pointer';
-
-    // Create "<" button
-    const prevButton = document.createElement('button');
-    prevButton.id = "prev-button";
-    prevButton.innerText = '<';
-    console.log("Previous button created.");
-    prevButton.style.cursor = 'pointer';
-
-    // Create ">" button
-    const nextButton = document.createElement('button');
-    nextButton.id = "next-button";
-    nextButton.innerText = '>';
-    console.log("Next button created.");
-    nextButton.style.cursor = 'pointer';
-
-    // Append buttons to the container
-    buttonContainer.appendChild(createButton);
-    buttonContainer.appendChild(prevButton);
-    buttonContainer.appendChild(nextButton);
-
-    // Insert the button container into the DOM
-    subjectInput.insertAdjacentElement('afterend', buttonContainer);
-    console.log("Button container added to DOM.");
+    subjectInput.insertAdjacentElement('afterend', createButton);
+    console.log("Create Subject button added.");
 
     // Event listener for "Create Subject" button
     createButton.addEventListener('click', async () => {
         console.log("Generating subject...");
-        const bodyText = bodyInput.innerText;
+        const bodyText = bodyInput.innerText?.trim(); // Ensure bodyText is trimmed
+
+        // Check if bodyText is empty
+        if (!bodyText || bodyText.length === 0) {
+            console.error("Email content is empty.");
+            showEmptyContentPopup(); // Show popup if email content is empty
+            return;
+        }
 
         // Show "Generating subject lines..." in subject line
         subjectInput.value = "Generating subject lines...";
@@ -67,6 +46,7 @@ export function addCreateSubjectButton(subjectInput, bodyInput) {
             if (subjectOptions.length > 0) {
                 subjectInput.value = subjectOptions[currentIndex]; // Display the first subject
                 console.log("Generated subjects:", subjectOptions);
+                showNavigationButtons(subjectInput); // Show navigation buttons
             } else {
                 console.error("No valid subjects generated.");
                 subjectInput.value = "No subject generated.";
@@ -76,27 +56,76 @@ export function addCreateSubjectButton(subjectInput, bodyInput) {
             subjectInput.value = "Error occurred while generating subjects.";
         }
     });
+}
+function showNavigationButtons(subjectInput) {
+    let navContainer = document.getElementById('nav-container');
 
-    // Event listeners for "<" and ">" buttons
+    // If the container already exists, remove it
+    if (navContainer) {
+        navContainer.remove();
+    }
+
+    // Create a new navigation container
+    navContainer = document.createElement('div');
+    navContainer.id = 'nav-container';
+    navContainer.style.display = 'inline-flex';
+    navContainer.style.alignItems = 'center';
+    navContainer.style.gap = '4px';
+    navContainer.style.marginTop = '10px';
+
+    // Create "<" button
+    const prevButton = document.createElement('button');
+    prevButton.id = 'prev-button';
+    prevButton.innerText = '<';
+    prevButton.style.cursor = 'pointer';
+
+    // Create page indicator
+    const pageIndicator = document.createElement('span');
+    pageIndicator.id = 'page-indicator';
+    pageIndicator.innerText = `${currentIndex + 1}/${subjectOptions.length}`;
+    pageIndicator.style.fontSize = '14px';
+    pageIndicator.style.color = '#555';
+
+    // Create ">" button
+    const nextButton = document.createElement('button');
+    nextButton.id = 'next-button';
+    nextButton.innerText = '>';
+    nextButton.style.cursor = 'pointer';
+
+    // Append navigation elements to the container
+    navContainer.appendChild(prevButton);
+    navContainer.appendChild(pageIndicator);
+    navContainer.appendChild(nextButton);
+
+    // Append navigation buttons below the subjectInput but aligned with Create Button
+    const createButton = document.getElementById('create-subject-button');
+    createButton.style.marginRight = '10px';
+    createButton.parentElement.insertBefore(navContainer, createButton.nextSibling);
+
+    // Event listeners for navigation buttons
     prevButton.addEventListener('click', () => {
-        console.log("Previous button clicked.");
         if (subjectOptions.length > 0) {
             currentIndex = (currentIndex - 1 + subjectOptions.length) % subjectOptions.length; // Loop back to last if at first
-            console.log("Current Index:", currentIndex, "Subject:", subjectOptions[currentIndex]);
             subjectInput.value = subjectOptions[currentIndex];
-        } else {
-            console.error("No subject options available.");
+            pageIndicator.innerText = `${currentIndex + 1}/${subjectOptions.length}`;
+            console.log("Previous clicked. Current Index:", currentIndex);
         }
     });
 
     nextButton.addEventListener('click', () => {
-        console.log("Next button clicked.");
         if (subjectOptions.length > 0) {
             currentIndex = (currentIndex + 1) % subjectOptions.length; // Loop to first if at last
-            console.log("Current Index:", currentIndex, "Subject:", subjectOptions[currentIndex]);
             subjectInput.value = subjectOptions[currentIndex];
-        } else {
-            console.error("No subject options available.");
+            pageIndicator.innerText = `${currentIndex + 1}/${subjectOptions.length}`;
+            console.log("Next clicked. Current Index:", currentIndex);
         }
+    });
+}
+
+// Show popup for empty content
+function showEmptyContentPopup() {
+    console.log("Displaying empty content popup...");
+    createPopupDiv("Error", (contentDiv) => {
+        contentDiv.innerText = "Email content cannot be empty. Please provide valid content before generating subject lines.";
     });
 }

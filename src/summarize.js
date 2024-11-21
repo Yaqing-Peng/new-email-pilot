@@ -1,8 +1,9 @@
 import { callAIPromptAPI } from './prompt-api.js';
+import { createPopupDiv } from './popup.js';
 
 console.log("Summarize content script loaded.");
 
-// 添加 Summarize 按钮并定义点击事件
+// Add Summarize button and define click event
 export function addSummarizeButton(subjectElement) {
     const summarizeButton = document.createElement("button");
     summarizeButton.id = "summarize-button";
@@ -24,23 +25,23 @@ export function addSummarizeButton(subjectElement) {
             return;
         }
 
-        // 如果弹窗已经存在，直接切换到 "Loading..." 状态
+        // If popup already exists, switch to "Loading..." state
         const existingPopup = document.querySelector("#summary-popup");
         if (existingPopup) {
             updatePopupContent("Summarizing...");
         } else {
-            // 如果弹窗不存在，创建一个新的
+            // If not, create a new popup
             showSummaryPopup("Summarizing...");
         }
 
-        // 构建 prompt，并使用 callAIPromptAPI 调用 API
+        // Build prompt and call API using callAIPromptAPI
         const prompt = `Summarize the following email content in 100 words or less:\n\n${emailContent}`;
         console.log("Generated Prompt:", prompt);
         try {
-            let summary = await callAIPromptAPI(prompt); // 使用通用 API 调用函数
+            let summary = await callAIPromptAPI(prompt); 
 
             if (summary && summary.trim() !== "") {
-                updatePopupContent(summary); // 更新文本内容为实际摘要
+                updatePopupContent(summary); // Update popup content with summary
             } else {
                 console.error("Failed to generate summary or summary is empty.");
                 updatePopupContent("Failed to generate a summary. Please try again.");
@@ -52,7 +53,7 @@ export function addSummarizeButton(subjectElement) {
     });
 }
 
-// 获取邮件内容并清理
+// Get email content and clean it up
 function getEmailContent() {
     const emailBodyContainer = document.querySelector(".ii.gt");
     let emailContent = "";
@@ -67,40 +68,23 @@ function getEmailContent() {
     return emailContent.replace(/[^\x00-\x7F]/g, " ").slice(0, 1000);
 }
 
-// 显示弹出窗口
+// Show popup window
 function showSummaryPopup(initialContent) {
-    const popup = document.createElement("div");
-    popup.id = "summary-popup"; // 给弹窗添加唯一 ID，便于复用
-    popup.style.position = "fixed";
-    popup.style.top = "50%";
-    popup.style.left = "50%";
-    popup.style.transform = "translate(-50%, -50%)";
-    popup.style.width = "400px";
-    popup.style.padding = "20px";
-    popup.style.backgroundColor = "#fff";
-    popup.style.border = "1px solid #ccc";
-    popup.style.borderRadius = "8px";
-    popup.style.boxShadow = "0px 4px 8px rgba(0, 0, 0, 0.2)";
-    popup.style.zIndex = "1000";
-
-    popup.innerHTML = `
-        <h3>Summary</h3>
-        <p id="summary-content">${initialContent}</p>
-        <button id="close-popup" style="margin-top: 10px; padding: 5px 10px; cursor: pointer; background-color: #1a73e8; color: #fff; border: none; border-radius: 4px;">Close</button>
-    `;
-
-    document.body.appendChild(popup);
-
-    // 关闭弹窗
-    document.getElementById("close-popup").addEventListener("click", () => {
-        popup.remove();
+    // Use createPopupDiv function from popup.js
+    createPopupDiv("Summary", (contentDiv) => {
+        // Initialize content
+        contentDiv.id = "summary-content";
+        contentDiv.innerText = initialContent;
     });
+
 }
 
-// 更新弹窗文本内容
+// Update popup text content
 function updatePopupContent(newContent) {
-    const summaryContent = document.querySelector("#summary-popup #summary-content");
+    const summaryContent = document.querySelector("#summary-content");
     if (summaryContent) {
         summaryContent.innerText = newContent; // 更新内容
+    } else {
+        console.error("Summary content container not found.");
     }
 }
