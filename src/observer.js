@@ -17,7 +17,7 @@ const observer = new MutationObserver((mutations) => {
                     subjectArea: 'input[name="subjectbox"]',
                     emailBodyArea: '.Am.Al.editable',
                     subjectElement: 'h2.hP',
-                    replyArea: 'form.bAs]',
+                    replyArea: 'form.bAs',
                     newMsgEl: 'div.aYF',
                 },
                 "Gmail"
