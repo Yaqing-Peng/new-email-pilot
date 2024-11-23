@@ -1,29 +1,27 @@
 import { createPopupDiv } from "./popup.js";
 import { callAIPromptAPI } from "./prompt-api.js";
 import { showModal } from "./showModal.js";
+import { createButton } from './button.js';
 
-export function addPolishButton(subjectArea) {
+export function addPolishButton(subjectArea, emailBodyArea) {
   console.log("Creating polish button...");
 
-  // Create the button
-  const polishButton = document.createElement("button");
-  polishButton.id = "polishButton";
-  polishButton.textContent = "Polish Text";
-  polishButton.style.marginLeft = "10px";
+  // Create polish button
+  const polishButton = createButton("polish-button", "Polish Text");
 
   // Insert button next to the subject area
   subjectArea.insertAdjacentElement("afterend", polishButton);
-  polishButton.addEventListener("click", openPromptPopup);
+  polishButton.addEventListener("click", () => openPromptPopup(emailBodyArea));
 
   // Check if the button is added to the DOM
-  if (document.querySelector("#polishButton")) {
+  if (document.querySelector("#polish-button")) {
     console.log("Polish button successfully added.");
   } else {
     console.error("Failed to add polish button.");
   }
 }
 
-function openPromptPopup() {
+function openPromptPopup(emailBodyArea) {
   console.log("Creating polish pop-up window...");
 
   createPopupDiv("Polish Email", (contentDiv) => {
@@ -74,9 +72,6 @@ function openPromptPopup() {
     // Generate polished text
     generateButton.addEventListener("click", async () => {
       const userInput = promptInput.value.trim();
-      const emailBodyArea = document.querySelector(
-        "div[aria-label='Message Body']"
-      );
 
       if (!emailBodyArea || !emailBodyArea.innerText.trim()) {
         showModal({
@@ -130,9 +125,7 @@ function openPromptPopup() {
 
     // Insert polished text into the email body
     insertButton.addEventListener("click", () => {
-      const emailBodyArea = document.querySelector(
-        "div[aria-label='Message Body']"
-      );
+      // const emailBodyArea = document.querySelector('.Am.Al.editable');
       const resultText = resultTextarea.value.trim();
 
       if (!emailBodyArea) {
