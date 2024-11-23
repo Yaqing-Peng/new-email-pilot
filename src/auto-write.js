@@ -1,20 +1,18 @@
 import { callAIPromptAPI } from './prompt-api.js';
 import { createPopupDiv } from './popup.js';
+import { createButton } from './button.js';
 
-export function addAutoWriteButton(subjectArea) {
+export function addAutoWriteButton(subjectArea, emailBodyArea) {
   console.log("Creating auto-write button...")
 
-  const autoWriteButton = document.createElement("button");
-  autoWriteButton.id = "autoWriteButton";
-  autoWriteButton.textContent = "Auto Write";
-  autoWriteButton.style.margin = "10px";
+  const autoWriteButton = createButton("auto-write-button", "Auto Write");
   subjectArea.insertAdjacentElement('afterend', autoWriteButton);
 
-  autoWriteButton.addEventListener("click", openPromptPopup);
+  autoWriteButton.addEventListener("click", () => openPromptPopup(subjectArea, emailBodyArea));
 }
 
 // Function to open the specific prompt popup
-function openPromptPopup() {
+function openPromptPopup(subjectArea, emailBodyArea) {
   console.log("Creating auto-write pop-up window...");
 
   createPopupDiv("Auto Write Email", (contentDiv) => {
@@ -38,7 +36,7 @@ function openPromptPopup() {
       if (userInput) {
         // Valid input, remove error message if it exists and generate email content
         errorMessage.style.display = "none";
-        generateEmailContent(userInput + '. Also generate subject.');
+        generateEmailContent(userInput + '. Also generate subject.', subjectArea, emailBodyArea);
       } else {
         // Invalid input, show error message
         errorMessage.style.display = "block";
@@ -47,11 +45,9 @@ function openPromptPopup() {
   });
 }
 
-async function generateEmailContent(prompt) {
-  const subjectArea = document.querySelector('input[name="subjectbox"]');
-  const emailBodyArea = document.querySelector("div[aria-label='Message Body']");
-
+async function generateEmailContent(prompt, subjectArea, emailBodyArea) {
   if (emailBodyArea) {
+    subjectArea.value = '';//clear subject
     emailBodyArea.innerText = "Email is being generated. Please wait...";
   }
 

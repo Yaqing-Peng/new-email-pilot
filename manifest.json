@@ -8,11 +8,10 @@
     "content_scripts": [
         {
             "matches": [
-                "https://mail.google.com/*"
+                "https://mail.google.com/*",
+                "https://outlook.office365.com/*"
             ],
-            "js": [
-                "dist/bundle.js"
-            ],
+            "js": ["dist/bundle.js"],
             "run_at": "document_end"
         }
     ]  

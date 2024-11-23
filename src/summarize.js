@@ -1,20 +1,12 @@
 import { callAIPromptAPI } from './prompt-api.js';
 import { createPopupDiv } from './popup.js';
+import { createButton } from './button.js';
 
 console.log("Summarize content script loaded.");
 
 // Add Summarize button and define click event
 export function addSummarizeButton(subjectElement) {
-    const summarizeButton = document.createElement("button");
-    summarizeButton.id = "summarize-button";
-    summarizeButton.innerText = "Summarize";
-    summarizeButton.style.marginLeft = "10px";
-    summarizeButton.style.cursor = "pointer";
-    summarizeButton.style.padding = "5px 10px";
-    summarizeButton.style.backgroundColor = "#1a73e8";
-    summarizeButton.style.color = "#fff";
-    summarizeButton.style.border = "none";
-    summarizeButton.style.borderRadius = "4px";
+    const summarizeButton = createButton("summarize-button", "Summarize");
 
     subjectElement.insertAdjacentElement("afterend", summarizeButton);
 
@@ -25,14 +17,8 @@ export function addSummarizeButton(subjectElement) {
             return;
         }
 
-        // If popup already exists, switch to "Loading..." state
-        const existingPopup = document.querySelector("#summary-popup");
-        if (existingPopup) {
-            updatePopupContent("Summarizing...");
-        } else {
-            // If not, create a new popup
-            showSummaryPopup("Summarizing...");
-        }
+        //initialize the summarize popup
+        getSummaryPopup("Summarizing...");
 
         // Build prompt and call API using callAIPromptAPI
         const prompt = `Summarize the following email content in 100 words or less:\n\n${emailContent}`;
@@ -41,21 +27,23 @@ export function addSummarizeButton(subjectElement) {
             let summary = await callAIPromptAPI(prompt); 
 
             if (summary && summary.trim() !== "") {
-                updatePopupContent(summary); // Update popup content with summary
+                getSummaryPopup(summary); // Update popup content with summary
             } else {
                 console.error("Failed to generate summary or summary is empty.");
-                updatePopupContent("Failed to generate a summary. Please try again.");
+                getSummaryPopup("Failed to generate a summary. Please try again.");
             }
         } catch (error) {
             console.error("Error generating summary:", error);
-            updatePopupContent("An error occurred while generating the summary.");
+            getSummaryPopup("An error occurred while generating the summary.");
         }
     });
 }
 
 // Get email content and clean it up
 function getEmailContent() {
-    const emailBodyContainer = document.querySelector(".ii.gt");
+    //choose gmail or outlook
+    const emailBodyContainer = document.querySelector(".ii.gt") || document.querySelector('div[aria-label="Message body"]');
+
     let emailContent = "";
 
     if (emailBodyContainer) {
@@ -68,23 +56,20 @@ function getEmailContent() {
     return emailContent.replace(/[^\x00-\x7F]/g, " ").slice(0, 1000);
 }
 
-// Show popup window
-function showSummaryPopup(initialContent) {
-    // Use createPopupDiv function from popup.js
-    createPopupDiv("Summary", (contentDiv) => {
-        // Initialize content
-        contentDiv.id = "summary-content";
-        contentDiv.innerText = initialContent;
-    });
+// Show or update popup window
+function getSummaryPopup(content) {
+    // Check if popup content already exists
+    let summaryContent = document.querySelector("#summary-content");
 
-}
-
-// Update popup text content
-function updatePopupContent(newContent) {
-    const summaryContent = document.querySelector("#summary-content");
     if (summaryContent) {
-        summaryContent.innerText = newContent; // 更新内容
+        // If exists, update content
+        summaryContent.innerText = content;
     } else {
-        console.error("Summary content container not found.");
+        // If not exists, create the popup
+        createPopupDiv("Summary", (contentDiv) => {
+            // Initialize content
+            contentDiv.id = "summary-content";
+            contentDiv.innerText = content;
+        });
     }
 }

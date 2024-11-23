@@ -1,12 +1,10 @@
 import { callAIPromptAPI } from './prompt-api.js';
+import { createButton } from './button.js';
 
 export function addAutoReplyButton(replyArea, emailBodyArea) {
     console.log("Creating auto-reply button...")
-
-    const autoReplyButton = document.createElement("button");
-    autoReplyButton.id = "autoReplyButton";
-    autoReplyButton.textContent = "Auto Reply";
-    autoReplyButton.style.margin = "10px";
+    
+    const autoReplyButton = createButton("auto-reply-button", "Auto Reply");
     replyArea.insertAdjacentElement('afterend', autoReplyButton);
 
     autoReplyButton.addEventListener('click', async () => {
@@ -18,7 +16,7 @@ export function addAutoReplyButton(replyArea, emailBodyArea) {
             return;
         }
 
-        const prompt = "Create a reply email without subject for this email content: " + emailContent;
+        const prompt = "Create a reply email for this email content, but do not create subject: " + emailContent;
         console.log(prompt);
 
         try {
@@ -31,21 +29,18 @@ export function addAutoReplyButton(replyArea, emailBodyArea) {
 }
 
 
-// 获取邮件内容并清理
 function getEmailContent() {
-    // 选择包含邮件正文的主要元素（
-    const emailBodyContainer = document.querySelector(".ii.gt"); 
+    const emailBodyContainer = document.querySelector(".ii.gt") 
+        || document.querySelector('div[aria-label="Message body"]'); 
     let emailContent = "";
 
     if (emailBodyContainer) {
-        // 提取正文内容并清理多余的空白字符
         emailContent = emailBodyContainer.innerText.trim();
     } else {
         console.error("Unable to find the email content container.");
         return "";
     }
 
-    // 清理非英文字符和多余的内容，限制长度
     return emailContent.replace(/[^\x00-\x7F]/g, " ").slice(0, 1000);
 }
 
