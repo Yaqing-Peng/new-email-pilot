@@ -1,3 +1,18 @@
+import { showErrorPopup } from './popup.js';
+
+// Error handling function
+async function handleAIError(error, prompt) {
+    console.error("Error calling AI Prompt API:", error);
+    console.error("Prompt causing error:", prompt);
+
+    if (error.message && error.message.includes("untested language")) {
+        showErrorPopup("Error", "Your request includes unsupported language. Please use English only for both input and output.");
+    } else {
+        showErrorPopup("Error", "An unexpected error occurred. Please try again later.");
+    }
+}
+
+// Use AI model to prompt for user input
 export async function callAIPromptAPI(prompt) {
     try {
         const { available } = await ai.languageModel.capabilities();
@@ -7,11 +22,9 @@ export async function callAIPromptAPI(prompt) {
             return result;
         } else {
             console.error("AI model is not available.");
-            return "AI model is not available.";
+            showErrorPopup("Error", "AI model is not available. Please try again later.");
         }
     } catch (error) {
-        console.error("Error calling AI Prompt API:", error);
-        console.error("Prompt causing error:", prompt); // 输出导致错误的 prompt
-        return "Error occurred while calling AI Prompt API.";
+        await handleAIError(error, prompt);
     }
 }
