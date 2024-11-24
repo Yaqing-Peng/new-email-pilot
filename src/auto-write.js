@@ -1,5 +1,5 @@
 import { callAIPromptAPI } from './prompt-api.js';
-import { createPopupDiv } from './popup.js';
+import { createPopupDiv, showErrorPopup } from './popup.js';
 import { createButton } from './button.js';
 
 export function addAutoWriteButton(subjectArea, emailBodyArea) {
@@ -26,7 +26,7 @@ function openPromptPopup(subjectArea, emailBodyArea) {
     // Get references to elements inside contentDiv
     const promptInput = contentDiv.querySelector("#autoWritePrompt");
     const generateButton = contentDiv.querySelector("#generateButton");
-    const errorMessage = contentDiv.querySelector("#errorMessage");
+   /*  const errorMessage = contentDiv.querySelector("#errorMessage"); */
 
     // Generate button event listener
     generateButton.addEventListener("click", () => {
@@ -35,11 +35,12 @@ function openPromptPopup(subjectArea, emailBodyArea) {
 
       if (userInput) {
         // Valid input, remove error message if it exists and generate email content
-        errorMessage.style.display = "none";
+        /* errorMessage.style.display = "none"; */
         generateEmailContent(userInput + '. Also generate subject.', subjectArea, emailBodyArea);
       } else {
         // Invalid input, show error message
-        errorMessage.style.display = "block";
+        showErrorPopup("Input Error", "Please enter content for your email before generating.");     
+        /* errorMessage.style.display = "block"; */
       }
     });
   });
@@ -54,11 +55,25 @@ async function generateEmailContent(prompt, subjectArea, emailBodyArea) {
   const emailContent = await callAIPromptAPI(prompt);
   console.log(emailContent);
 
-  const [subject, ...bodyParts] = emailContent.split('\n');
+/*   const [subject, ...bodyParts] = emailContent.split('\n');
   const body = bodyParts.join('\n').replace('Subject:', '').trim();
 
   if (subjectArea) {
     subjectArea.value = subject.replace(/^## Subject:/, '').trim();
+  }
+  if (emailBodyArea) {
+    emailBodyArea.innerText = body;
+  } */
+  const [subject, ...bodyParts] = emailContent.split('\n');
+
+  // 处理 subject，移除可能的 "Subject:" 或 "## Subject:" 前缀
+  const cleanedSubject = subject.replace(/^(##\s*)?Subject:\s*/, '').trim();
+  
+  // 处理 body
+  const body = bodyParts.join('\n').trim();
+  
+  if (subjectArea) {
+    subjectArea.value = cleanedSubject;
   }
   if (emailBodyArea) {
     emailBodyArea.innerText = body;
