@@ -15,7 +15,7 @@ export function createPopupDiv(titleText, contentGenerator) {
       <div class="title-bar" style="
         background-color: #f3f4f6;
         color: black;
-        padding: 10px;
+        padding: 8px 10px 5px 10px;
         cursor: move;
         font-weight: bold;
         display: flex;
@@ -75,4 +75,15 @@ export function createPopupDiv(titleText, contentGenerator) {
   if (contentGenerator && typeof contentGenerator === "function") {
     contentGenerator(contentDiv);
   }
+}
+
+// Error popup display function
+export function showErrorPopup(title, message) {
+  createPopupDiv(title, (contentDiv) => {
+      contentDiv.innerHTML = `
+          <p style="color: red; font-size: 14px; margin: 0; line-height: 1.5; padding: 5px 0 10px 0;">
+              ${message}
+          </p>
+      `;
+  });
 }
