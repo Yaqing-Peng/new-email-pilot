@@ -34,7 +34,7 @@ function openPromptPopup(emailBodyArea) {
         <button class="style-button" data-style="Grammar and spelling check only">Grammar & spelling check only</button>
       </div>
 
-      <textarea id="polishPrompt" placeholder="Input additional instructions for polishing the email..." style="width: 100%; height: 100px;"></textarea>
+      <textarea id="polishPrompt" placeholder="Mail content has been selected, please input additional instructions for polishing the email..." style="width: 100%; height: 100px;"></textarea>
       <button id="generateButton" style="margin-top: 10px;">Generate Polished Text</button>
       <textarea id="polishedResult" style="width: 100%; height: 100px; margin-top: 10px;" readonly></textarea>
       <button id="insertButton" style="margin-top: 10px;">Insert Polished Text</button>
