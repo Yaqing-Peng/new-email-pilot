@@ -1,7 +1,7 @@
-import { createPopupDiv } from "./popup.js";
+import { createPopupDiv } from "./createPopupDiv.js";
 import { callAIPromptAPI } from "./prompt-api.js";
 import { showModal } from "./showModal.js";
-import { createButton } from './button.js';
+import { createButton } from "./button.js";
 
 export function addPolishButton(subjectArea, emailBodyArea) {
   console.log("Creating polish button...");

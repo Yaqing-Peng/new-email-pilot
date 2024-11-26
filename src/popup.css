@@ -1,0 +1,98 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+  width: 300px;
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.dashboard-header {
+  background: linear-gradient(90deg, #8e24aa, #d81b60);
+  color: white;
+  padding: 10px;
+  text-align: center;
+}
+
+.dashboard-nav {
+  display: flex;
+  justify-content: space-around;
+  background-color: #ffffff;
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.nav-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #555;
+  padding: 5px 10px;
+  transition: color 0.3s;
+}
+
+.nav-button:hover {
+  color: #d81b60;
+}
+
+.dashboard-content {
+  flex-grow: 1;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.content-section {
+  display: none;
+}
+
+.content-section.active {
+  display: block;
+}
+
+.action-button {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  font-size: 14px;
+  color: white;
+  background: linear-gradient(90deg, #8e24aa, #d81b60);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.action-button:hover {
+  background: linear-gradient(90deg, #d81b60, #8e24aa);
+}
+
+.dashboard-footer {
+  display: flex;
+  justify-content: space-around;
+  background-color: #ffffff;
+  padding: 10px 0;
+  border-top: 1px solid #ccc;
+}
+
+.footer-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #555;
+  transition: color 0.3s;
+}
+
+.footer-button:hover {
+  color: #d81b60;
+}
