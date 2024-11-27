@@ -11,10 +11,13 @@ export function createPopupDiv(titleText, contentGenerator) {
   popupDiv.style.width = "400px";
 
   // Set innerHTML for popup div
-  popupDiv.innerHTML = `
+  popupDiv.innerHTML =
+    `
         <div class="title-bar" style="
           background-color: #f3f4f6;
-          color: black;
+          color: ` +
+    (titleText === "Error" ? "red" : "black") +
+    `;
           padding: 10px;
           cursor: move;
           font-weight: bold;
@@ -31,7 +34,9 @@ export function createPopupDiv(titleText, contentGenerator) {
             margin-left: 10px;
           ">X</button>
         </div>
-        <div class="content-div" style="padding: 20px;"></div>
+        <div class="content-div" style="padding: 20px; color: ` +
+    (titleText === "Error" ? "red" : "black") +
+    `;"></div>
       `;
 
   // Append popup to document body

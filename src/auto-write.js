@@ -14,7 +14,7 @@ export function addAutoWriteButton(subjectArea, emailBodyArea) {
 }
 
 // Function to open the specific prompt popup
-function openPromptPopup(subjectArea, emailBodyArea) {
+export function openPromptPopup(subjectArea, emailBodyArea) {
   console.log("Creating auto-write pop-up window...");
 
   createPopupDiv("Auto Write Email", (contentDiv) => {

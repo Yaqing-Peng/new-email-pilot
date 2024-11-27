@@ -1,23 +1,20 @@
-import { showAutoWritePopup, addAutoWriteButton } from "./src/auto-write.js";
-import { platformElements } from "./src/observer.js";
-
 document.addEventListener("DOMContentLoaded", () => {
   // Initialize dashboard sections and navigation
   const sections = {
-    autoWrite: `
-      <h2>Auto Write</h2>
-      <p>Generate email content based on your input:</p>
-      <button id="autoWriteAction">Start Auto Write</button>
+    home: `
+      <h2>Welcome</h2>
+      <p>Use the tools below to enhance your emails:</p>
+      <button class="action-button" id="autoWrite">Auto Write</button>
+      <button class="action-button" id="polish">Polish</button>
+      <button class="action-button" id="summarize">Summarize</button>
     `,
-    polish: `
-      <h2>Polish</h2>
-      <p>Improve the style, grammar, and readability of your email:</p>
-      <button id="polishAction">Start Polishing</button>
+    tasks: `
+      <h2>Your Tasks</h2>
+      <p>No tasks available yet.</p>
     `,
-    summarize: `
-      <h2>Summarize</h2>
-      <p>Condense your email content into a summary:</p>
-      <button id="summarizeAction">Start Summarizing</button>
+    settings: `
+      <h2>Settings</h2>
+      <p>Configure your preferences here.</p>
     `,
   };
 
@@ -28,26 +25,31 @@ document.addEventListener("DOMContentLoaded", () => {
     <header class="dashboard-header">
       <img src="icon.png" alt="Extension Icon" class="extension-icon" />
       <div class="header-text">
-        <h1 class="header-title">PenPal</h1>
+        <h1 class="header-title">PenPal: </h1>
         <h2>Your AI Email Assistant</h2>
       </div>
+      <button id="closeDashboard" class="close-button">×</button>
     </header>
     <nav class="dashboard-nav">
-      <button data-section="autoWrite" class="nav-button">Auto Write</button>
-      <button data-section="polish" class="nav-button">Polish</button>
-      <button data-section="summarize" class="nav-button">Summarize</button>
+      <button data-section="home" class="nav-button">Home</button>
+      <button data-section="tasks" class="nav-button">Tasks</button>
+      <button data-section="settings" class="nav-button">Settings</button>
     </nav>
     <div class="dashboard-content">
-      ${sections.autoWrite}
+      ${sections.home}
     </div>
     <footer class="dashboard-footer">
-      <button id="footerHome" class="footer-button">🏠</button>
-      <button id="footerRefresh" class="footer-button">🔄</button>
-      <button id="footerProfile" class="footer-button">👤</button>
+    <p>PenPal@2024</p>
     </footer>
   `;
 
+  // Insert the dashboard into the body
   document.body.appendChild(mainContainer);
+
+  // Close dashboard button
+  document.getElementById("closeDashboard").addEventListener("click", () => {
+    window.close(); // Closes the popup window entirely
+  });
 
   // Navigation functionality
   document.querySelectorAll(".nav-button").forEach((button) => {
@@ -55,61 +57,53 @@ document.addEventListener("DOMContentLoaded", () => {
       const targetSection = event.target.getAttribute("data-section");
       const contentDiv = document.querySelector(".dashboard-content");
       contentDiv.innerHTML = sections[targetSection];
+    });
+  });
 
-      // Initialize specific functions for each section
-      if (targetSection === "autoWrite") {
-        // Add logic for Auto Write
-        document
-          .getElementById("autoWriteAction")
-          .addEventListener("click", () => {
-            if (
-              platformElements.subjectAreaEl &&
-              platformElements.emailBodyAreaEl
-            ) {
-              showAutoWritePopup(
-                platformElements.subjectAreaEl,
-                platformElements.emailBodyAreaEl
-              );
-            } else {
-              // Retry to detect the elements
-              platformElements.subjectAreaEl = document.querySelector(
-                'input[name="subjectbox"]'
-              );
-              platformElements.emailBodyAreaEl =
-                document.querySelector(".Am.Al.editable");
+  // Footer buttons (example interactions)
+  document.getElementById("footerHome").addEventListener("click", () => {
+    alert("Home clicked!");
+  });
 
-              if (
-                platformElements.subjectAreaEl &&
-                platformElements.emailBodyAreaEl
-              ) {
-                showAutoWritePopup(
-                  platformElements.subjectAreaEl,
-                  platformElements.emailBodyAreaEl
-                );
-              } else {
-                alert(
-                  "Compose window not detected. Please open a compose window first."
-                );
-              }
-            }
-          });
-      } else if (targetSection === "polish") {
-        // Add logic for Polish
-        document
-          .getElementById("polishAction")
-          .addEventListener("click", () => {
-            console.log("Polish action initiated.");
-            // Call Polish logic here
-          });
-      } else if (targetSection === "summarize") {
-        // Add logic for Summarize
-        document
-          .getElementById("summarizeAction")
-          .addEventListener("click", () => {
-            console.log("Summarize action initiated.");
-            // Call Summarize logic here
-          });
+  document.getElementById("footerRefresh").addEventListener("click", () => {
+    alert("Refresh clicked!");
+  });
+
+  document.getElementById("footerProfile").addEventListener("click", () => {
+    alert("Profile clicked!");
+  });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Attach event listeners to buttons
+  document.getElementById("autoWrite").addEventListener("click", () => {
+    sendMessageToContentScript({ action: "autoWrite" });
+  });
+
+  document.getElementById("polish").addEventListener("click", () => {
+    sendMessageToContentScript({ action: "polish" });
+  });
+
+  document.getElementById("summarize").addEventListener("click", () => {
+    sendMessageToContentScript({ action: "summarize" });
+  });
+});
+
+function sendMessageToContentScript(message) {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    if (tabs.length === 0) {
+      alert("No active tab found.");
+      return;
+    }
+
+    chrome.tabs.sendMessage(tabs[0].id, message, (response) => {
+      if (response?.success) {
+        console.log(response.message);
+      } else {
+        console.error(
+          response?.message || "Failed to communicate with the content script."
+        );
       }
     });
   });
-});
+}

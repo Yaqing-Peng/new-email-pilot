@@ -40,7 +40,7 @@ export function addSummarizeButton(subjectElement) {
 }
 
 // Get email content and clean it up
-function getEmailContent() {
+export function getEmailContent() {
   //choose gmail or outlook
   const emailBodyContainer =
     document.querySelector(".ii.gt") ||
@@ -59,7 +59,7 @@ function getEmailContent() {
 }
 
 // Show or update popup window
-function getSummaryPopup(content) {
+export function getSummaryPopup(content) {
   // Check if popup content already exists
   let summaryContent = document.querySelector("#summary-content");
 

@@ -1,11 +1,12 @@
+html,
 body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
+  background: transparent;
   color: #333;
   width: 300px;
-  height: 500px;
+  height: auto;
   display: flex;
   flex-direction: column;
 }
@@ -63,6 +64,24 @@ body {
   margin-right: 10px;
 }
 
+.close-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: none; /* No background */
+  border: none; /* No border */
+  font-size: 20px; /* Larger size for visibility */
+  font-weight: bold;
+  color: black; /* White color to match the header */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+.close-button:hover {
+  color: #ff6b6b; /* Highlight color on hover */
+  transform: scale(1.2); /* Slightly enlarge on hover */
+  transition: color 0.3s ease, transform 0.2s ease; /* Smooth transition */
+}
+
 .dashboard-nav {
   display: flex;
   justify-content: space-around;
@@ -117,11 +136,12 @@ body {
 }
 
 .dashboard-footer {
-  display: flex;
-  justify-content: space-around;
+  /* display: flex; */
+  /* justify-content: space-around; */
+  text-align: center;
   background-color: #ffffff;
-  padding: 10px 0;
-  border-top: 1px solid #ccc;
+  padding: 1px 0;
+  /* border-top: 1px solid #ccc; */
 }
 
 .footer-button {

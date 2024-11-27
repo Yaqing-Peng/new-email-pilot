@@ -2,7 +2,11 @@
   "manifest_version": 3,
   "name": "Gmail Extension Combine",
   "version": "1.0",
-  "permissions": ["activeTab"],
+  "permissions": ["activeTab", "scripting"],
+  "host_permissions": [
+    "https://mail.google.com/*",
+    "https://outlook.office365.com/*"
+  ],
   "content_scripts": [
     {
       "matches": [
