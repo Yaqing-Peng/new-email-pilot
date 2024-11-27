@@ -259,40 +259,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   createPopupDiv: () => (/* binding */ createPopupDiv)
 /* harmony export */ });
 function createPopupDiv(titleText, contentGenerator) {
-  // Initialize dashboard sections and navigation
-  var sections = {
-    home: "\n      <h2>Welcome</h2>\n      <p>Use the tools below to enhance your emails:</p>\n      <button class=\"action-button\" id=\"autoWrite\">Auto Write</button>\n      <button class=\"action-button\" id=\"polish\">Polish</button>\n      <button class=\"action-button\" id=\"summarize\">Summarize</button>\n    ",
-    tasks: "\n      <h2>Your Tasks</h2>\n      <p>No tasks available yet.</p>\n    ",
-    settings: "\n      <h2>Settings</h2>\n      <p>Configure your preferences here.</p>\n    "
-  };
-
-  // Populate the dashboard layout
-  var mainContainer = document.createElement("div");
-  mainContainer.classList.add("dashboard-container");
-  mainContainer.innerHTML = "\n    <header class=\"dashboard-header\">\n      <h1>My Extension</h1>\n    </header>\n    <nav class=\"dashboard-nav\">\n      <button data-section=\"home\" class=\"nav-button\">Home</button>\n      <button data-section=\"tasks\" class=\"nav-button\">Tasks</button>\n      <button data-section=\"settings\" class=\"nav-button\">Settings</button>\n    </nav>\n    <div class=\"dashboard-content\">\n      ".concat(sections.home, "\n    </div>\n    <footer class=\"dashboard-footer\">\n      <button id=\"footerHome\" class=\"footer-button\">\uD83C\uDFE0</button>\n      <button id=\"footerRefresh\" class=\"footer-button\">\uD83D\uDD04</button>\n      <button id=\"footerProfile\" class=\"footer-button\">\uD83D\uDC64</button>\n    </footer>\n  ");
-
-  // Insert the dashboard into the body
-  document.body.appendChild(mainContainer);
-
-  // Navigation functionality
-  document.querySelectorAll(".nav-button").forEach(function (button) {
-    button.addEventListener("click", function (event) {
-      var targetSection = event.target.getAttribute("data-section");
-      var contentDiv = document.querySelector(".dashboard-content");
-      contentDiv.innerHTML = sections[targetSection];
-    });
-  });
-
-  // Footer buttons (example interactions)
-  document.getElementById("footerHome").addEventListener("click", function () {
-    alert("Home clicked!");
-  });
-  document.getElementById("footerRefresh").addEventListener("click", function () {
-    alert("Refresh clicked!");
-  });
-  document.getElementById("footerProfile").addEventListener("click", function () {
-    alert("Profile clicked!");
-  });
   // Create popup div and set basic styles
   var popupDiv = document.createElement("div");
   popupDiv.style.position = "fixed";
