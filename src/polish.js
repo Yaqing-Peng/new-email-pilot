@@ -1,7 +1,7 @@
-import { createPopupDiv } from "./popup.js";
+import { createPopupDiv } from "./createPopupDiv.js";
 import { callAIPromptAPI } from "./prompt-api.js";
 import { showModal } from "./showModal.js";
-import { createButton } from './button.js';
+import { createButton } from "./button.js";
 
 export function addPolishButton(subjectArea, emailBodyArea) {
   console.log("Creating polish button...");
@@ -11,7 +11,9 @@ export function addPolishButton(subjectArea, emailBodyArea) {
 
   // Insert button next to the subject area
   subjectArea.insertAdjacentElement("afterend", polishButton);
-  polishButton.addEventListener("click", () => openPromptPopup(emailBodyArea));
+  polishButton.addEventListener("click", () =>
+    openPolishPromptPopup(emailBodyArea)
+  );
 
   // Check if the button is added to the DOM
   if (document.querySelector("#polish-button")) {
@@ -21,7 +23,7 @@ export function addPolishButton(subjectArea, emailBodyArea) {
   }
 }
 
-function openPromptPopup(emailBodyArea) {
+export function openPolishPromptPopup(emailBodyArea) {
   console.log("Creating polish pop-up window...");
 
   createPopupDiv("Polish Email", (contentDiv) => {
