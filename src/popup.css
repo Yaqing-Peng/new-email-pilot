@@ -37,9 +37,24 @@ body {
   margin-bottom: 20px;
 }
 
+.header-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin: 5px;
+}
+
 .header-title {
-  font-size: 18px;
+  /* font-size: 12px; */
+  /* text-align: center; */
   font-weight: bold;
+  margin: 0;
+}
+
+.header-text h2 {
+  font-size: 14px;
+  margin: 0;
+  margin-bottom: 5px;
 }
 
 .extension-icon {
