@@ -2,39 +2,53 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize dashboard sections and navigation
   const sections = {
     home: `
-      <h3>Welcome</h3>
-      <p>Use the tools below to enhance your emails:</p>
-      <button class="action-button" id="autoWrite">Auto Write</button>
-      <button class="action-button" id="polish">Polish</button>
-      <button class="action-button" id="summarize">Summarize</button>
+      <h3>Welcome to your AI Email Assistant!</h3>
+      <p>This Chrome extension enhances productivity by automating email tasks like summarizing content, crafting replies, polishing drafts, and generating subject lines.</p> 
+      <p>Seamlessly integrated with Gmail and Outlook, it adds smart buttons to your email interface, streamlining your workflow for a faster, smarter email experience.</p>
     `,
     tutorial: `
       <h3>Steps to get started</h3>
+      <h4>Prerequisites:</h4>
+      <ul>
+        <li>Install and enable the extension in <u>Chrome</u>.</li>
+        <li>Log in to <u>Gmail</u> or <u>Outlook</u>.</li>
+        <li>Open the <u>Compose</u> or <u>Reply</u> window to access features.</li>
+      </ul> 
 
-<p>1. Enable Chrome's Built-In AI:
-   - Follow <a href="https://developer.chrome.com/docs/extensions/ai/prompt-api" target="_blank">this guide</a> to enable Chrome's AI capabilities.</p>
-
-<p>2. Download the Extension Files:
-   - Get the PenPal files from <a href="https://github.com/Yaqing-Peng/gmail-ai-extension" target="_blank">this GitHub repository</a>.</p>
-
-
-<p>3. Enable Developer Mode and Upload the Extension via <a href="chrome://extensions/" target="_blank">chrome://extensions/</a>.</p>
-
-<p>4. Access the Dashboard:
-   - Click the PenPal icon in Chrome to open the dashboard. Use tools like Summarize, Polish, and Auto Write.</p>
-
-<p>5. Use Embedded Buttons:
-   - Find buttons like Create Subject, Polish Text, and Auto Write directly in your email editor.</p>
-
-<p>6. Learn More:
-   - Use the Tutorial or Contact Us options in the dashboard for help.</p>
-
-<p>Get started quickly with both the dashboard and embedded features to improve your email-writing!</p>
+      <h4>Features and Button Locations:</h4>
+      <div class="feature-name-div">
+            <strong class="feature-name">Create Subject</strong>
+            <strong class="feature-name">Polish Text</strong>
+            <strong class="feature-name">Auto Write</strong>
+          </div>
+          <ul>
+            <li><strong>Location:</strong> In the Compose window.</li>
+            <li><strong>Function:</strong></li>
+            <ul>
+              <li>Create Subject: Suggests subject lines.</li>
+              <li>Polish Text: Refines email drafts.</li>
+              <li>Auto Write: Generates email content.</li>
+            </ul>
+          </ul>
+          
+          <strong class="feature-name">Summarize</strong>
+          <ul>
+            <li><strong>Location:</strong> Top-right corner of the email view.</li>
+            <li><strong>Function:</strong> Generates a concise summary of email content.</li>
+          </ul>
+          
+          <strong class="feature-name">Auto Reply</strong>
+          <ul>
+            <li><strong>Location:</strong> In the Reply window.</li>
+            <li><strong>Function:</strong> Creates a context-aware reply.</li>
+          </ul>
+      </ul>
     `,
     contact: `
-      <h3>Email</h3>
+    <h3>Let's Get Connected!</h3>
+      <h4>Email</h4>
       <p><a href="mailto:penpalai@gmail.com">penpalai@gmail.com</a></p>
-      <h3>GitHub</h3>
+      <h4>GitHub</h4>
       <p><a href="https://github.com/Yaqing-Peng/gmail-ai-extension" target="_blank">GitHub Repository</a></p>
     `,
   };

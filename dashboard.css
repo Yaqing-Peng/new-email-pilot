@@ -12,7 +12,7 @@ body {
   font-family: Arial, sans-serif;
   background: transparent;
   color: #333;
-  width: 300px;
+  width: 350px;
   height: auto;
   display: flex;
   flex-direction: column;
@@ -68,7 +68,7 @@ body {
 .extension-icon {
   width: 40px;
   height: 40px;
-  margin-right: 10px;
+  margin: 0 25px;
 }
 
 .close-button {
@@ -119,8 +119,12 @@ body {
 
 .dashboard-content {
   flex-grow: 1;
-  padding: 10px;
+  padding: 15px;
   overflow-y: auto;
+  font-family: "Arial", sans-serif; /* Clean, modern font */
+  font-size: 14px;
+  color: #333; /* Darker text for better contrast */
+  line-height: 1.6;
 }
 
 .content-section {
@@ -129,6 +133,62 @@ body {
 
 .content-section.active {
   display: block;
+}
+
+.dashboard-content h1,
+.dashboard-content h2,
+.dashboard-content h3 {
+  margin-top: 0;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #d81b60; /* Highlighted header color */
+  text-align: center; /* Center headers */
+}
+.dashboard-content h4 {
+  margin: 0;
+}
+
+.dashboard-content p {
+  margin: 5px 0;
+  text-align: justify; /* For polished text alignment */
+}
+
+.dashboard-content ul {
+  margin: 5px 0;
+  padding-left: 10px;
+  list-style-type: disc;
+}
+
+.dashboard-content ul li {
+  margin-bottom: 3px;
+}
+
+.dashboard-content a {
+  color: #d81b60; /* Consistent with header color */
+  text-decoration: none;
+}
+
+.dashboard-content a:hover {
+  text-decoration: underline; /* Hover effect for links */
+}
+
+.feature-name-div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px 0;
+}
+.feature-name {
+  display: inline-block;
+  padding: 5px;
+  margin: 5px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #ffffff;
+  background: linear-gradient(90deg, #8e24aa, #d81b60);
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .action-button {
@@ -141,7 +201,6 @@ body {
   background: linear-gradient(90deg, #8e24aa, #d81b60);
   border: none;
   border-radius: 5px;
-  cursor: pointer;
 }
 
 .action-button:hover {
