@@ -1,3 +1,10 @@
+.caveat {
+  font-family: "Caveat", cursive;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
 html,
 body {
   margin: 0;
@@ -81,12 +88,11 @@ body {
   transform: scale(1.2); /* Slightly enlarge on hover */
   transition: color 0.3s ease, transform 0.2s ease; /* Smooth transition */
 }
-
 .dashboard-nav {
   display: flex;
   justify-content: space-around;
   background-color: #ffffff;
-  padding: 10px 0;
+  padding: 5px 0;
   border-bottom: 1px solid #ccc;
 }
 
@@ -94,14 +100,21 @@ body {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 15px;
+  font-weight: 600;
   color: #555;
   padding: 5px 10px;
-  transition: color 0.3s;
+  transition: color 0.3s, border-bottom 0.3s;
+  border-bottom: 3px solid transparent; /* Add an underline for tabs */
 }
 
 .nav-button:hover {
   color: #d81b60;
+}
+
+.nav-button.active {
+  color: #d81b60;
+  border-bottom: 3px solid #d81b60; /* Highlight the active tab */
 }
 
 .dashboard-content {
@@ -139,6 +152,7 @@ body {
   /* display: flex; */
   /* justify-content: space-around; */
   text-align: center;
+  font-size: 14px;
   background-color: #ffffff;
   padding: 1px 0;
   /* border-top: 1px solid #ccc; */

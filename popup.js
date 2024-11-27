@@ -2,19 +2,40 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize dashboard sections and navigation
   const sections = {
     home: `
-      <h2>Welcome</h2>
+      <h3>Welcome</h3>
       <p>Use the tools below to enhance your emails:</p>
       <button class="action-button" id="autoWrite">Auto Write</button>
       <button class="action-button" id="polish">Polish</button>
       <button class="action-button" id="summarize">Summarize</button>
     `,
-    tasks: `
-      <h2>Your Tasks</h2>
-      <p>No tasks available yet.</p>
+    tutorial: `
+      <h3>Steps to get started</h3>
+
+<p>1. Enable Chrome's Built-In AI:
+   - Follow <a href="https://developer.chrome.com/docs/extensions/ai/prompt-api" target="_blank">this guide</a> to enable Chrome's AI capabilities.</p>
+
+<p>2. Download the Extension Files:
+   - Get the PenPal files from <a href="https://github.com/Yaqing-Peng/gmail-ai-extension" target="_blank">this GitHub repository</a>.</p>
+
+
+<p>3. Enable Developer Mode and Upload the Extension via <a href="chrome://extensions/" target="_blank">chrome://extensions/</a>.</p>
+
+<p>4. Access the Dashboard:
+   - Click the PenPal icon in Chrome to open the dashboard. Use tools like Summarize, Polish, and Auto Write.</p>
+
+<p>5. Use Embedded Buttons:
+   - Find buttons like Create Subject, Polish Text, and Auto Write directly in your email editor.</p>
+
+<p>6. Learn More:
+   - Use the Tutorial or Contact Us options in the dashboard for help.</p>
+
+<p>Get started quickly with both the dashboard and embedded features to improve your email-writing!</p>
     `,
-    settings: `
-      <h2>Settings</h2>
-      <p>Configure your preferences here.</p>
+    contact: `
+      <h3>Email</h3>
+      <p><a href="mailto:penpalai@gmail.com">penpalai@gmail.com</a></p>
+      <h3>GitHub</h3>
+      <p><a href="https://github.com/Yaqing-Peng/gmail-ai-extension" target="_blank">GitHub Repository</a></p>
     `,
   };
 
@@ -25,21 +46,21 @@ document.addEventListener("DOMContentLoaded", () => {
     <header class="dashboard-header">
       <img src="icon.png" alt="Extension Icon" class="extension-icon" />
       <div class="header-text">
-        <h1 class="header-title">PenPal: </h1>
+        <h1 class="header-title caveat">PenPal: </h1>
         <h2>Your AI Email Assistant</h2>
       </div>
       <button id="closeDashboard" class="close-button">×</button>
     </header>
     <nav class="dashboard-nav">
-      <button data-section="home" class="nav-button">Home</button>
-      <button data-section="tasks" class="nav-button">Tasks</button>
-      <button data-section="settings" class="nav-button">Settings</button>
+      <button data-section="home" class="nav-button active">Home</button>
+      <button data-section="tutorial" class="nav-button">Tutorial</button>
+      <button data-section="contact" class="nav-button">Contact Us</button>
     </nav>
     <div class="dashboard-content">
       ${sections.home}
     </div>
     <footer class="dashboard-footer">
-    <p>PenPal@2024</p>
+    <p class="caveat">PenPal@2024</p>
     </footer>
   `;
 
@@ -54,6 +75,15 @@ document.addEventListener("DOMContentLoaded", () => {
   // Navigation functionality
   document.querySelectorAll(".nav-button").forEach((button) => {
     button.addEventListener("click", (event) => {
+      // Remove the active class from all buttons
+      document
+        .querySelectorAll(".nav-button")
+        .forEach((btn) => btn.classList.remove("active"));
+
+      // Add the active class to the clicked button
+      event.target.classList.add("active");
+
+      // Update the content based on the clicked button
       const targetSection = event.target.getAttribute("data-section");
       const contentDiv = document.querySelector(".dashboard-content");
       contentDiv.innerHTML = sections[targetSection];
@@ -61,17 +91,17 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Footer buttons (example interactions)
-  document.getElementById("footerHome").addEventListener("click", () => {
-    alert("Home clicked!");
-  });
+  // document.getElementById("footerHome").addEventListener("click", () => {
+  //   alert("Home clicked!");
+  // });
 
-  document.getElementById("footerRefresh").addEventListener("click", () => {
-    alert("Refresh clicked!");
-  });
+  // document.getElementById("footerRefresh").addEventListener("click", () => {
+  //   alert("Refresh clicked!");
+  // });
 
-  document.getElementById("footerProfile").addEventListener("click", () => {
-    alert("Profile clicked!");
-  });
+  // document.getElementById("footerProfile").addEventListener("click", () => {
+  //   alert("Profile clicked!");
+  // });
 });
 
 document.addEventListener("DOMContentLoaded", () => {
