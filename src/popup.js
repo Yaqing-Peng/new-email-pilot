@@ -12,8 +12,16 @@ export function createPopupDiv(titleText, contentGenerator) {
 
   // Set innerHTML for popup div
   popupDiv.innerHTML = `
+    <div class="popup-container" style="
+      background: linear-gradient(
+        90deg,
+        rgba(142, 36, 170, 0.2),
+        rgba(216, 27, 96, 0.2));">
       <div class="title-bar" style="
-        background-color: #f3f4f6;
+          background: linear-gradient(
+            90deg,
+            rgba(142, 36, 170, 0.5),
+            rgba(216, 27, 96, 0.5));
         color: black;
         padding: 8px 10px 5px 10px;
         cursor: move;
@@ -32,6 +40,8 @@ export function createPopupDiv(titleText, contentGenerator) {
         ">X</button>
       </div>
       <div class="content-div" style="padding: 20px;"></div>
+    </div>
+
     `;
 
   // Append popup to document body
@@ -80,7 +90,7 @@ export function createPopupDiv(titleText, contentGenerator) {
 // Error popup display function
 export function showErrorPopup(title, message) {
   createPopupDiv(title, (contentDiv) => {
-      contentDiv.innerHTML = `
+    contentDiv.innerHTML = `
           <p style="color: red; font-size: 14px; margin: 0; line-height: 1.5; padding: 5px 0 10px 0;">
               ${message}
           </p>

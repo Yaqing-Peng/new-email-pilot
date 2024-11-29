@@ -49,11 +49,9 @@ export function addCreateSubjectButton(subjectArea, subjectInput, emailBodyArea)
                 showNavigationButtons(subjectInput); // Show navigation buttons
             } else {
                 console.error("No valid subjects generated.");
-                subjectInput.value = "No subject generated.";
             }
         } catch (error) {
             console.error("Error generating subjects:", error);
-            subjectInput.value = "Error occurred while generating subjects.";
         }
     });
 }
