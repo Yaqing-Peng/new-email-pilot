@@ -24,7 +24,7 @@ export function addCreateSubjectButton(subjectArea, emailBodyArea) {
             console.error("Email content is empty.");
             showErrorPopup(
               "Error",
-              "The generated text area is empty. Please provide text to insert."
+              "Email content is empty."
             );
             return;
         }
@@ -49,11 +49,9 @@ export function addCreateSubjectButton(subjectArea, emailBodyArea) {
                 showNavigationButtons(subjectArea); // Show navigation buttons
             } else {
                 console.error("No valid subjects generated.");
-                subjectArea.value = "No subject generated.";
             }
         } catch (error) {
             console.error("Error generating subjects:", error);
-            subjectArea.value = "Error occurred while generating subjects.";
         }
     });
 }
