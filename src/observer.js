@@ -106,10 +106,10 @@ const observer = new MutationObserver((mutations) => {
       handleMutations(
         {
           subjectArea: 'input[name="subjectbox"]',
+          subjectInput:'input[name="subjectbox"]',
           emailBodyArea: ".Am.Al.editable",
           subjectElement: "h2.hP",
-          replyArea: "form.bAs",
-          newMsgEl: "div.aYF",
+          replyArea: "table.IG",
         },
         "Gmail"
       );
@@ -117,8 +117,8 @@ const observer = new MutationObserver((mutations) => {
       handleMutations(
         {
           subjectArea: "div.ZMK7F",
-          emailBodyArea:
-            'div[aria-label="Message body, press Alt+F10 to exit"]',
+          subjectInput:'input[aria-label="Add a subject"]',
+          emailBodyArea:'div[aria-label="Message body, press Alt+F10 to exit"]', 
           subjectElement: "span.JdFsz",
           replyArea: "div.UVFSO.GCol2",
         },
@@ -130,22 +130,20 @@ const observer = new MutationObserver((mutations) => {
 
 // Generalized mutation handling
 function handleMutations(selectors, platform) {
-  const { subjectArea, emailBodyArea, subjectElement, replyArea, newMsgEl } =
-    selectors;
+  const { subjectArea, subjectInput, emailBodyArea, subjectElement, replyArea} = selectors;
   const subjectAreaEl = document.querySelector(subjectArea);
+  const subjectInputEl = document.querySelector(subjectInput);
   const emailBodyAreaEl = document.querySelector(emailBodyArea);
   const subjectElementEl = document.querySelector(subjectElement);
   const replyAreaEl = document.querySelector(replyArea);
-  const newMsgElDetected = newMsgEl ? document.querySelector(newMsgEl) : true;
 
   const actions = [
     {
       condition:
-        newMsgElDetected &&
         subjectAreaEl &&
         emailBodyAreaEl &&
         !document.querySelector("#auto-write-button"),
-      action: () => addAutoWriteButton(subjectAreaEl, emailBodyAreaEl),
+      action: () => addAutoWriteButton(subjectAreaEl,subjectInputEl, emailBodyAreaEl),
       message: `${platform}: Compose window detected. Adding auto-write button...`,
     },
     {
@@ -156,7 +154,6 @@ function handleMutations(selectors, platform) {
     },
     {
       condition:
-        newMsgElDetected &&
         subjectAreaEl &&
         emailBodyAreaEl &&
         !document.querySelector("#polish-button"),
@@ -165,16 +162,14 @@ function handleMutations(selectors, platform) {
     },
     {
       condition:
-        newMsgElDetected &&
         subjectAreaEl &&
         emailBodyAreaEl &&
         !document.querySelector("#create-subject-button"),
-      action: () => addCreateSubjectButton(subjectAreaEl, emailBodyAreaEl),
+      action: () => addCreateSubjectButton(subjectAreaEl, subjectInputEl, emailBodyAreaEl),
       message: `${platform}: Compose window detected. Adding create subject button...`,
     },
     {
       condition:
-        !newMsgElDetected &&
         replyAreaEl &&
         emailBodyAreaEl &&
         !document.querySelector("#auto-reply-button"),

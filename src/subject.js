@@ -7,8 +7,8 @@ console.log("Content script loaded.");
 let subjectOptions = []; // Array to hold the generated subjects
 let currentIndex = 0; // Current index in the subject options
 
-export function addCreateSubjectButton(subjectArea, emailBodyArea) {
-  console.log("Creating buttons...");
+export function addCreateSubjectButton(subjectArea, subjectInput, emailBodyArea) {
+    console.log("Creating buttons...");
 
   const createSubjectButton = createButton(
     "create-subject-button",
@@ -29,8 +29,8 @@ export function addCreateSubjectButton(subjectArea, emailBodyArea) {
       return;
     }
 
-    // Show "Generating subject lines..." in subject line
-    subjectArea.value = "Generating subject lines...";
+        // Show "Generating subject lines..." in subject line
+        subjectInput.value = "Generating subject lines...";
 
     const prompt = `Write three email subject lines in English based on the following email content. Do not attempt to interpret or modify any technical terms, abbreviations, or acronyms. Treat them as is. Email content:\n\n${bodyText}\n\nOnly return the subject lines, separated by new lines.`;
     console.log("Prompt:", prompt);
@@ -43,22 +43,22 @@ export function addCreateSubjectButton(subjectArea, emailBodyArea) {
         .filter((subject) => subject !== ""); // Remove empty entries
       currentIndex = 0; // Reset index to the first subject
 
-      if (subjectOptions.length > 0) {
-        subjectArea.value = subjectOptions[currentIndex]; // Display the first subject
-        console.log("Generated subjects:", subjectOptions);
-        showNavigationButtons(subjectArea); // Show navigation buttons
-      } else {
-        console.error("No valid subjects generated.");
-        subjectArea.value = "No subject generated.";
-      }
-    } catch (error) {
-      console.error("Error generating subjects:", error);
-      subjectArea.value = "Error occurred while generating subjects.";
-    }
-  });
+            if (subjectOptions.length > 0) {
+                subjectInput.value = subjectOptions[currentIndex]; // Display the first subject
+                console.log("Generated subjects:", subjectOptions);
+                showNavigationButtons(subjectInput); // Show navigation buttons
+            } else {
+                console.error("No valid subjects generated.");
+                subjectInput.value = "No subject generated.";
+            }
+        } catch (error) {
+            console.error("Error generating subjects:", error);
+            subjectInput.value = "Error occurred while generating subjects.";
+        }
+    });
 }
-function showNavigationButtons(subjectArea) {
-  let navContainer = document.getElementById("nav-container");
+function showNavigationButtons(subjectInput) {
+    let navContainer = document.getElementById('nav-container');
 
   // If the container already exists, remove it
   if (navContainer) {
@@ -107,25 +107,24 @@ function showNavigationButtons(subjectArea) {
     createSubjectButton.nextSibling
   );
 
-  // Event listeners for navigation buttons
-  prevButton.addEventListener("click", () => {
-    if (subjectOptions.length > 0) {
-      currentIndex =
-        (currentIndex - 1 + subjectOptions.length) % subjectOptions.length; // Loop back to last if at first
-      subjectArea.value = subjectOptions[currentIndex];
-      pageIndicator.innerText = `${currentIndex + 1}/${subjectOptions.length}`;
-      console.log("Previous clicked. Current Index:", currentIndex);
-    }
-  });
+    // Event listeners for navigation buttons
+    prevButton.addEventListener('click', () => {
+        if (subjectOptions.length > 0) {
+            currentIndex = (currentIndex - 1 + subjectOptions.length) % subjectOptions.length; // Loop back to last if at first
+            subjectInput.value = subjectOptions[currentIndex];
+            pageIndicator.innerText = `${currentIndex + 1}/${subjectOptions.length}`;
+            console.log("Previous clicked. Current Index:", currentIndex);
+        }
+    });
 
-  nextButton.addEventListener("click", () => {
-    if (subjectOptions.length > 0) {
-      currentIndex = (currentIndex + 1) % subjectOptions.length; // Loop to first if at last
-      subjectArea.value = subjectOptions[currentIndex];
-      pageIndicator.innerText = `${currentIndex + 1}/${subjectOptions.length}`;
-      console.log("Next clicked. Current Index:", currentIndex);
-    }
-  });
+    nextButton.addEventListener('click', () => {
+        if (subjectOptions.length > 0) {
+            currentIndex = (currentIndex + 1) % subjectOptions.length; // Loop to first if at last
+            subjectInput.value = subjectOptions[currentIndex];
+            pageIndicator.innerText = `${currentIndex + 1}/${subjectOptions.length}`;
+            console.log("Next clicked. Current Index:", currentIndex);
+        }
+    });
 }
 
 // Show popup for empty content
