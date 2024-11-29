@@ -1,7 +1,6 @@
-import { createPopupDiv } from "./createPopupDiv.js";
+import { createPopupDiv, showErrorPopup } from "./popup.js";
 import { callAIPromptAPI } from "./prompt-api.js";
-import { showModal } from "./showModal.js";
-import { createButton } from "./button.js";
+import { createButton } from './button.js';
 
 export function addPolishButton(subjectArea, emailBodyArea) {
   console.log("Creating polish button...");
@@ -37,7 +36,7 @@ export function openPolishPromptPopup(emailBodyArea) {
         <button class="style-button" data-style="Grammar and spelling check only">Grammar & spelling check only</button>
       </div>
 
-      <textarea id="polishPrompt" placeholder="Input additional instructions for polishing the email..." style="width: 100%; height: 100px;"></textarea>
+      <textarea id="polishPrompt" placeholder="Mail content has been selected, please input additional instructions for polishing the email..." style="width: 100%; height: 100px;"></textarea>
       <button id="generateButton" style="margin-top: 10px;">Generate Polished Text</button>
       <textarea id="polishedResult" style="width: 100%; height: 100px; margin-top: 10px;" readonly></textarea>
       <button id="insertButton" style="margin-top: 10px;">Insert Polished Text</button>
@@ -76,18 +75,7 @@ export function openPolishPromptPopup(emailBodyArea) {
       const userInput = promptInput.value.trim();
 
       if (!emailBodyArea || !emailBodyArea.innerText.trim()) {
-        showModal({
-          message: "No text found in the email body area.",
-          buttons: [
-            {
-              text: "Close",
-              onClick: (modal) => {
-                console.log("Modal closed.");
-                document.body.removeChild(modal);
-              },
-            },
-          ],
-        });
+        showErrorPopup("Error", "No text found in the email body area.");
         return;
       }
 
@@ -97,32 +85,25 @@ export function openPolishPromptPopup(emailBodyArea) {
         Return a single email template, without repeating sections, and ensure it is ready to be sent.
         Do not include a subject line. Do not include extra notes, suggestions, or alternative templates.
         ${userInput ? "Additional instructions: " + userInput : ""}
-        ${existingText}
+        ${existingText ? "Email content:\n" + existingText : ""}
       `;
 
       // Show loading message
       resultTextarea.value = "Generating polished text, please wait...";
 
       // Call the API to polish the text
-      try {
+      /* try {
         const polishedText = await callAIPromptAPI(prompt);
         resultTextarea.value =
           polishedText.replace(/^Subject:.*$/m, "").trim() ||
           "Error generating polished text.";
       } catch (error) {
-        showModal({
-          message: "Error generating polished text.",
-          buttons: [
-            {
-              text: "Close",
-              onClick: (modal) => {
-                console.log("Error modal closed.");
-                document.body.removeChild(modal);
-              },
-            },
-          ],
-        });
-      }
+        showErrorPopup("Error", "Error generating polished text. Please try again.");
+      }  */
+      const polishedText = await callAIPromptAPI(prompt);
+      resultTextarea.value =
+        polishedText?.replace(/^Subject:.*$/m, "").trim() || "Error generating polished text.";
+      
     });
 
     // Insert polished text into the email body
@@ -131,61 +112,36 @@ export function openPolishPromptPopup(emailBodyArea) {
       const resultText = resultTextarea.value.trim();
 
       if (!emailBodyArea) {
-        showModal({
-          message: "No email body area found to insert the text.",
-          buttons: [
-            {
-              text: "Close",
-              onClick: (modal) => {
-                console.log("Modal closed.");
-                document.body.removeChild(modal);
-              },
-            },
-          ],
-        });
+        showErrorPopup("Error", "No email body area found to insert the text.");
         return;
       }
 
       if (!resultText) {
-        showModal({
-          message:
-            "The generated text area is empty. Please provide text to insert.",
-          buttons: [
-            {
-              text: "Close",
-              onClick: (modal) => {
-                console.log("Modal closed.");
-                document.body.removeChild(modal);
-              },
-            },
-          ],
-        });
+        showErrorPopup(
+          "Error",
+          "The generated text area is empty. Please provide text to insert."
+        );
         return;
       }
 
-      showModal({
-        message:
-          "Are you sure you want to insert the polished text into the email body?",
-        buttons: [
-          {
-            text: "Confirm",
-            color: "white",
-            backgroundColor: "#007bff",
-            onClick: (modal) => {
-              emailBodyArea.innerText = resultText;
-              resultTextarea.value = ""; // Clear the result area
-              console.log("Text inserted successfully.");
-              document.body.removeChild(modal);
-            },
-          },
-          {
-            text: "Cancel",
-            onClick: (modal) => {
-              console.log("Insertion cancelled.");
-              document.body.removeChild(modal);
-            },
-          },
-        ],
+      createPopupDiv("Confirm Insert", (confirmDiv) => {
+        confirmDiv.innerHTML = `
+          <p>Are you sure you want to insert the polished text into the email body? This will replace your original email.</p>
+          <button id="confirmButton" style="margin-right: 10px;">Confirm</button>
+          <button id="cancelButton">Cancel</button>
+        `;
+
+        confirmDiv.querySelector("#confirmButton").addEventListener("click", () => {
+          emailBodyArea.innerText = resultText;
+          resultTextarea.value = ""; // Clear the result area
+          console.log("Text inserted successfully.");
+          document.body.removeChild(confirmDiv.parentElement); // Close the confirmation popup
+        });
+
+        confirmDiv.querySelector("#cancelButton").addEventListener("click", () => {
+          console.log("Insertion cancelled.");
+          document.body.removeChild(confirmDiv.parentElement); // Close the confirmation popup
+        });
       });
     });
   });
