@@ -1,6 +1,7 @@
 import { createPopupDiv, showErrorPopup } from "./popup.js";
 import { callAIPromptAPI } from "./prompt-api.js";
 import { createButton } from './button.js';
+import { getButtonStyle } from './popup-button-style.js';
 
 export function addPolishButton(subjectArea, emailBodyArea) {
   console.log("Creating polish button...");
@@ -30,16 +31,16 @@ export function openPolishPromptPopup(emailBodyArea) {
     contentDiv.innerHTML = `
       <p style="margin-top: 0px; margin-bottom: 10px;">Choose a style for the email:</p>
       <div id="buttonContainer" style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px;">
-        <button class="style-button" data-style="Professional">Professional</button>
-        <button class="style-button" data-style="Friendly">Friendly</button>
-        <button class="style-button" data-style="Concise">Concise</button>
-        <button class="style-button" data-style="Grammar and spelling check only">Grammar & spelling check only</button>
+        <button class="style-button" data-style="Professional" style="${getButtonStyle()}">Professional</button>
+        <button class="style-button" data-style="Friendly" style="${getButtonStyle()}">Friendly</button>
+        <button class="style-button" data-style="Concise" style="${getButtonStyle()}">Concise</button>
+        <button class="style-button" data-style="Grammar and spelling check only" style="${getButtonStyle()}">Grammar & spelling check only</button>
       </div>
 
       <textarea id="polishPrompt" placeholder="Mail content has been selected, please input additional instructions for polishing the email..." style="width: 100%; height: 100px;"></textarea>
-      <button id="generateButton" style="margin-top: 10px;">Generate Polished Text</button>
+      <button id="generateButton" style="${getButtonStyle()}">Generate Polished Text</button>
       <textarea id="polishedResult" style="width: 100%; height: 100px; margin-top: 10px;" readonly></textarea>
-      <button id="insertButton" style="margin-top: 10px;">Insert Polished Text</button>
+      <button id="insertButton" style="${getButtonStyle()}">Insert Polished Text</button>
       `;
 
     // Get references to elements inside contentDiv
@@ -56,7 +57,7 @@ export function openPolishPromptPopup(emailBodyArea) {
 
         // Highlight the selected button and reset others
         contentDiv.querySelectorAll(".style-button").forEach((btn) => {
-          btn.style.backgroundColor = btn === button ? "#007bff" : "";
+          btn.style.backgroundColor = btn === button ? "#8e24aa" : "";
           btn.style.color = btn === button ? "white" : "";
         });
 
@@ -65,7 +66,7 @@ export function openPolishPromptPopup(emailBodyArea) {
 
       // Set initial styles for the default selected button
       if (button.dataset.style === selectedStyle) {
-        button.style.backgroundColor = "#007bff";
+        button.style.backgroundColor = "#8e24aa";
         button.style.color = "white";
       }
     });

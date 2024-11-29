@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
     <header class="dashboard-header">
       <img src="icon.png" alt="Extension Icon" class="extension-icon" />
       <div class="header-text">
-        <h1 class="header-title caveat">PenPal: </h1>
+        <h1 class="header-title caveat">EmailPilot: </h1>
         <h2>Your AI Email Assistant</h2>
       </div>
       <button id="closeDashboard" class="close-button">×</button>
@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ${sections.home}
     </div>
     <footer class="dashboard-footer">
-    <p class="caveat">PenPal@2024</p>
+    <p class="caveat">EmailPilot@2024</p>
     </footer>
   `;
 
