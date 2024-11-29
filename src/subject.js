@@ -24,7 +24,7 @@ export function addCreateSubjectButton(subjectArea, subjectInput, emailBodyArea)
             console.error("Email content is empty.");
             showErrorPopup(
               "Error",
-              "The generated text area is empty. Please provide text to insert."
+              "Email content is empty."
             );
             return;
         }
