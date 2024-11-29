@@ -93,14 +93,6 @@ export function openPolishPromptPopup(emailBodyArea) {
       resultTextarea.value = "Generating polished text, please wait...";
 
       // Call the API to polish the text
-      /* try {
-        const polishedText = await callAIPromptAPI(prompt);
-        resultTextarea.value =
-          polishedText.replace(/^Subject:.*$/m, "").trim() ||
-          "Error generating polished text.";
-      } catch (error) {
-        showErrorPopup("Error", "Error generating polished text. Please try again.");
-      }  */
       const polishedText = await callAIPromptAPI(prompt);
       resultTextarea.value =
         polishedText?.replace(/^Subject:.*$/m, "").trim() || "Error generating polished text.";
@@ -136,12 +128,12 @@ export function openPolishPromptPopup(emailBodyArea) {
           emailBodyArea.innerText = resultText;
           resultTextarea.value = ""; // Clear the result area
           console.log("Text inserted successfully.");
-          document.body.removeChild(confirmDiv.parentElement); // Close the confirmation popup
+          document.body.removeChild(confirmDiv.closest('.popup-container').parentElement);
         });
 
         confirmDiv.querySelector("#cancelButton").addEventListener("click", () => {
           console.log("Insertion cancelled.");
-          document.body.removeChild(confirmDiv.parentElement); // Close the confirmation popup
+          document.body.removeChild(confirmDiv.closest('.popup-container').parentElement);
         });
       });
     });

@@ -71,6 +71,5 @@ async function generateEmailContent(prompt, subjectInput, emailBodyArea) {
     }
   } catch (error) {
     console.error("Error generating email content:", error);
-    showErrorPopup("Error", "An error occurred while generating the email. Please try again.");
   }
 }
