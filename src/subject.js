@@ -1,6 +1,6 @@
-import { callAIPromptAPI } from './prompt-api.js';
-import { createPopupDiv } from './popup.js';
-import { createButton } from './button.js';
+import { callAIPromptAPI } from "./prompt-api.js";
+import { showErrorPopup } from "./popup.js";
+import { createButton } from "./button.js";
 
 console.log("Content script loaded.");
 
@@ -22,7 +22,10 @@ export function addCreateSubjectButton(subjectArea, emailBodyArea) {
         // Check if bodyText is empty
         if (!bodyText || bodyText.length === 0) {
             console.error("Email content is empty.");
-            showEmptyContentPopup(); // Show popup if email content is empty
+            showErrorPopup(
+              "Error",
+              "The generated text area is empty. Please provide text to insert."
+            );
             return;
         }
 
@@ -118,13 +121,5 @@ function showNavigationButtons(subjectArea) {
             pageIndicator.innerText = `${currentIndex + 1}/${subjectOptions.length}`;
             console.log("Next clicked. Current Index:", currentIndex);
         }
-    });
-}
-
-// Show popup for empty content
-function showEmptyContentPopup() {
-    console.log("Displaying empty content popup...");
-    createPopupDiv("Error", (contentDiv) => {
-        contentDiv.innerText = "Email content cannot be empty. Please provide valid content before generating subject lines.";
     });
 }

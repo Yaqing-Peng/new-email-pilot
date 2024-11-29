@@ -3,16 +3,18 @@ import { createPopupDiv, showErrorPopup } from './popup.js';
 import { createButton } from './button.js';
 
 export function addAutoWriteButton(subjectArea, emailBodyArea) {
-  console.log("Creating auto-write button...")
+  console.log("Creating auto-write button...");
 
   const autoWriteButton = createButton("auto-write-button", "Auto Write");
-  subjectArea.insertAdjacentElement('afterend', autoWriteButton);
+  subjectArea.insertAdjacentElement("afterend", autoWriteButton);
 
-  autoWriteButton.addEventListener("click", () => openPromptPopup(subjectArea, emailBodyArea));
+  autoWriteButton.addEventListener("click", () =>
+    openPromptPopup(subjectArea, emailBodyArea)
+  );
 }
 
 // Function to open the specific prompt popup
-function openPromptPopup(subjectArea, emailBodyArea) {
+export function openPromptPopup(subjectArea, emailBodyArea) {
   console.log("Creating auto-write pop-up window...");
 
   createPopupDiv("Auto Write Email", (contentDiv) => {
@@ -26,7 +28,6 @@ function openPromptPopup(subjectArea, emailBodyArea) {
     // Get references to elements inside contentDiv
     const promptInput = contentDiv.querySelector("#autoWritePrompt");
     const generateButton = contentDiv.querySelector("#generateButton");
-   /*  const errorMessage = contentDiv.querySelector("#errorMessage"); */
 
     // Generate button event listener
     generateButton.addEventListener("click", () => {
@@ -35,12 +36,10 @@ function openPromptPopup(subjectArea, emailBodyArea) {
 
       if (userInput) {
         // Valid input, remove error message if it exists and generate email content
-        /* errorMessage.style.display = "none"; */
         generateEmailContent(userInput + '. Also generate subject.', subjectArea, emailBodyArea);
       } else {
         // Invalid input, show error message
-        showErrorPopup("Input Error", "Please enter content for your email before generating.");     
-        /* errorMessage.style.display = "block"; */
+        showErrorPopup("Error", "Please enter content for your email before generating.");     
       }
     });
   });
@@ -48,34 +47,30 @@ function openPromptPopup(subjectArea, emailBodyArea) {
 
 async function generateEmailContent(prompt, subjectArea, emailBodyArea) {
   if (emailBodyArea) {
-    subjectArea.value = '';//clear subject
+    subjectArea.value = ""; //clear subject
     emailBodyArea.innerText = "Email is being generated. Please wait...";
   }
 
-  const emailContent = await callAIPromptAPI(prompt);
-  console.log(emailContent);
+  try {
+    const emailContent = await callAIPromptAPI(prompt);
+    console.log(emailContent);
 
-/*   const [subject, ...bodyParts] = emailContent.split('\n');
-  const body = bodyParts.join('\n').replace('Subject:', '').trim();
+    const [subject, ...bodyParts] = emailContent.split('\n');
 
-  if (subjectArea) {
-    subjectArea.value = subject.replace(/^## Subject:/, '').trim();
-  }
-  if (emailBodyArea) {
-    emailBodyArea.innerText = body;
-  } */
-  const [subject, ...bodyParts] = emailContent.split('\n');
-
-  // 处理 subject，移除可能的 "Subject:" 或 "## Subject:" 前缀
-  const cleanedSubject = subject.replace(/^(##\s*)?Subject:\s*/, '').trim();
-  
-  // 处理 body
-  const body = bodyParts.join('\n').trim();
-  
-  if (subjectArea) {
-    subjectArea.value = cleanedSubject;
-  }
-  if (emailBodyArea) {
-    emailBodyArea.innerText = body;
+    // Replace the "Subject:" or "## Subject:" prefix
+    const cleanedSubject = subject.replace(/^(##\s*)?Subject:\s*/, '').trim();
+    
+    // Join the remaining parts of the email content
+    const body = bodyParts.join('\n').trim();
+    
+    if (subjectArea) {
+      subjectArea.value = cleanedSubject;
+    }
+    if (emailBodyArea) {
+      emailBodyArea.innerText = body;
+    }
+  } catch (error) {
+    console.error("Error generating email content:", error);
+    showErrorPopup("Error", "An error occurred while generating the email. Please try again.");
   }
 }

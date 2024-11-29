@@ -10,7 +10,9 @@ export function addPolishButton(subjectArea, emailBodyArea) {
 
   // Insert button next to the subject area
   subjectArea.insertAdjacentElement("afterend", polishButton);
-  polishButton.addEventListener("click", () => openPromptPopup(emailBodyArea));
+  polishButton.addEventListener("click", () =>
+    openPolishPromptPopup(emailBodyArea)
+  );
 
   // Check if the button is added to the DOM
   if (document.querySelector("#polish-button")) {
@@ -20,7 +22,7 @@ export function addPolishButton(subjectArea, emailBodyArea) {
   }
 }
 
-function openPromptPopup(emailBodyArea) {
+export function openPolishPromptPopup(emailBodyArea) {
   console.log("Creating polish pop-up window...");
 
   createPopupDiv("Polish Email", (contentDiv) => {
@@ -90,14 +92,18 @@ function openPromptPopup(emailBodyArea) {
       resultTextarea.value = "Generating polished text, please wait...";
 
       // Call the API to polish the text
-      try {
+      /* try {
         const polishedText = await callAIPromptAPI(prompt);
         resultTextarea.value =
           polishedText.replace(/^Subject:.*$/m, "").trim() ||
           "Error generating polished text.";
       } catch (error) {
         showErrorPopup("Error", "Error generating polished text. Please try again.");
-      } 
+      }  */
+      const polishedText = await callAIPromptAPI(prompt);
+      resultTextarea.value =
+        polishedText?.replace(/^Subject:.*$/m, "").trim() || "Error generating polished text.";
+      
     });
 
     // Insert polished text into the email body

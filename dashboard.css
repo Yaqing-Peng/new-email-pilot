@@ -1,0 +1,231 @@
+.caveat {
+  font-family: "Caveat", cursive;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: transparent;
+  color: #333;
+  width: 350px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-container {
+  background: linear-gradient(
+    90deg,
+    rgba(142, 36, 170, 0.2),
+    rgba(216, 27, 96, 0.2)
+  );
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: black;
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px;
+  background: linear-gradient(
+    90deg,
+    rgba(142, 36, 170, 0.5),
+    rgba(216, 27, 96, 0.5)
+  );
+  border-radius: 8px;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.header-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin: 5px;
+}
+
+.header-title {
+  /* font-size: 12px; */
+  /* text-align: center; */
+  font-weight: bold;
+  margin: 0;
+}
+
+.header-text h2 {
+  font-size: 14px;
+  margin: 0;
+  margin-bottom: 5px;
+}
+
+.extension-icon {
+  width: 40px;
+  height: 40px;
+  margin: 0 25px;
+}
+
+.close-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: none; /* No background */
+  border: none; /* No border */
+  font-size: 20px; /* Larger size for visibility */
+  font-weight: bold;
+  color: black; /* White color to match the header */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+.close-button:hover {
+  color: #ff6b6b; /* Highlight color on hover */
+  transform: scale(1.2); /* Slightly enlarge on hover */
+  transition: color 0.3s ease, transform 0.2s ease; /* Smooth transition */
+}
+.dashboard-nav {
+  display: flex;
+  justify-content: space-around;
+  background-color: #ffffff;
+  padding: 5px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.nav-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  color: #555;
+  padding: 5px 10px;
+  transition: color 0.3s, border-bottom 0.3s;
+  border-bottom: 3px solid transparent; /* Add an underline for tabs */
+}
+
+.nav-button:hover {
+  color: #d81b60;
+}
+
+.nav-button.active {
+  color: #d81b60;
+  border-bottom: 3px solid #d81b60; /* Highlight the active tab */
+}
+
+.dashboard-content {
+  flex-grow: 1;
+  padding: 15px;
+  overflow-y: auto;
+  font-family: "Arial", sans-serif; /* Clean, modern font */
+  font-size: 14px;
+  color: #333; /* Darker text for better contrast */
+  line-height: 1.6;
+}
+
+.content-section {
+  display: none;
+}
+
+.content-section.active {
+  display: block;
+}
+
+.dashboard-content h1,
+.dashboard-content h2,
+.dashboard-content h3 {
+  margin-top: 0;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #d81b60; /* Highlighted header color */
+  text-align: center; /* Center headers */
+}
+.dashboard-content h4 {
+  margin: 0;
+}
+
+.dashboard-content p {
+  margin: 5px 0;
+  text-align: justify; /* For polished text alignment */
+}
+
+.dashboard-content ul {
+  margin: 5px 0;
+  padding-left: 10px;
+  list-style-type: disc;
+}
+
+.dashboard-content ul li {
+  margin-bottom: 3px;
+}
+
+.dashboard-content a {
+  color: #d81b60; /* Consistent with header color */
+  text-decoration: none;
+}
+
+.dashboard-content a:hover {
+  text-decoration: underline; /* Hover effect for links */
+}
+
+.feature-name-div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px 0;
+}
+.feature-name {
+  display: inline-block;
+  padding: 5px;
+  margin: 5px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #ffffff;
+  background: linear-gradient(90deg, #8e24aa, #d81b60);
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.action-button {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  font-size: 14px;
+  color: white;
+  background: linear-gradient(90deg, #8e24aa, #d81b60);
+  border: none;
+  border-radius: 5px;
+}
+
+.action-button:hover {
+  background: linear-gradient(90deg, #d81b60, #8e24aa);
+}
+
+.dashboard-footer {
+  /* display: flex; */
+  /* justify-content: space-around; */
+  text-align: center;
+  font-size: 14px;
+  background-color: #ffffff;
+  padding: 1px 0;
+  /* border-top: 1px solid #ccc; */
+}
+
+.footer-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #555;
+  transition: color 0.3s;
+}
+
+.footer-button:hover {
+  color: #d81b60;
+}
