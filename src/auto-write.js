@@ -1,6 +1,6 @@
-import { callAIPromptAPI } from "./prompt-api.js";
-import { createPopupDiv } from "./createPopupDiv.js";
-import { createButton } from "./button.js";
+import { callAIPromptAPI } from './prompt-api.js';
+import { createPopupDiv, showErrorPopup } from './popup.js';
+import { createButton } from './button.js';
 import { getButtonStyle } from './popup-button-style.js';
 
 export function addAutoWriteButton(subjectArea,subjectInput, emailBodyArea) {
@@ -27,7 +27,6 @@ export function openPromptPopup(subjectInput, emailBodyArea) {
     // Get references to elements inside contentDiv
     const promptInput = contentDiv.querySelector("#autoWritePrompt");
     const generateButton = contentDiv.querySelector("#generateButton");
-    const errorMessage = contentDiv.querySelector("#errorMessage");
 
     // Generate button event listener
     generateButton.addEventListener("click", () => {
@@ -40,7 +39,7 @@ export function openPromptPopup(subjectInput, emailBodyArea) {
         generateEmailContent(userInput + '. Also generate subject.', subjectInput, emailBodyArea);
       } else {
         // Invalid input, show error message
-        errorMessage.style.display = "block";
+        showErrorPopup("Error", "Please enter content for your email before generating.");     
       }
     });
   });
@@ -48,20 +47,30 @@ export function openPromptPopup(subjectInput, emailBodyArea) {
 
 async function generateEmailContent(prompt, subjectInput, emailBodyArea) {
   if (emailBodyArea) {
-    subjectInput.value = '';//clear subject
+    subjectInput.value = ""; //clear subject
     emailBodyArea.innerText = "Email is being generated. Please wait...";
   }
 
-  const emailContent = await callAIPromptAPI(prompt);
-  console.log(emailContent);
+  try {
+    const emailContent = await callAIPromptAPI(prompt);
+    console.log(emailContent);
 
-  const [subject, ...bodyParts] = emailContent.split("\n");
-  const body = bodyParts.join("\n").replace("Subject:", "").trim();
+    const [subject, ...bodyParts] = emailContent.split('\n');
 
-  if (subjectInput) {
-    subjectInput.value = subject.replace(/^## Subject:/, '').trim();
-  }
-  if (emailBodyArea) {
-    emailBodyArea.innerText = body;
+    // Replace the "Subject:" or "## Subject:" prefix
+    const cleanedSubject = subject.replace(/^(##\s*)?Subject:\s*/, '').trim();
+    
+    // Join the remaining parts of the email content
+    const body = bodyParts.join('\n').trim();
+    
+    if (subjectInput) {
+      subjectInput.value = cleanedSubject;
+    }
+    if (emailBodyArea) {
+      emailBodyArea.innerText = body;
+    }
+  } catch (error) {
+    console.error("Error generating email content:", error);
+    showErrorPopup("Error", "An error occurred while generating the email. Please try again.");
   }
 }

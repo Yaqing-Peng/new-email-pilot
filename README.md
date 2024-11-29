@@ -76,9 +76,9 @@ To enable Gemini Nano and Prompt API for local experimentation:
    cd gmail-ai-extension
    ```
 
-2. Install dependencies (if necessary):
+2. Install dependencies:
    ```bash
-   npm install -g webpack webpack-cli   # Only if npm run build fails
+   npm install
    ```
 
 3. Build the project:
@@ -113,12 +113,6 @@ We welcome feedback and contributions! Feel free to open issues or submit pull r
 This project is licensed under the MIT License. See the LICENSE file for details.
 
 ## Notes
-
-### Webpack Installation
-If `npm run build` works without additional setup, there's no need to install Webpack separately. However, if `npm run build` fails, install Webpack using:
-```bash
-npm install -g webpack webpack-cli
-```
 
 ### Storage Requirements
 Ensure you have at least 22 GB free storage before downloading Gemini Nano. The AI model will not work otherwise.

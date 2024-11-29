@@ -1,5 +1,5 @@
 import { callAIPromptAPI } from "./prompt-api.js";
-import { createPopupDiv } from "./createPopupDiv.js";
+import { createPopupDiv } from "./popup.js";
 import { createButton } from "./button.js";
 
 console.log("Summarize content script loaded.");

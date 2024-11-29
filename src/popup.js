@@ -9,50 +9,30 @@ export function createPopupDiv(titleText, contentGenerator) {
   popupDiv.style.boxShadow = "0 0 10px rgba(0,0,0,0.5)";
   popupDiv.style.zIndex = "1000";
   popupDiv.style.width = "400px";
-  popupDiv.style.borderRadius = "8px"; // Add rounded corners for a modern look
 
   // Set innerHTML for popup div
   popupDiv.innerHTML = `
-    <div class="popup-container" style="
-      background: linear-gradient(
-        90deg,
-        rgba(142, 36, 170, 0.2),
-        rgba(216, 27, 96, 0.2)
-      );
-      border-radius: 8px;
-      overflow: hidden;
-    ">
       <div class="title-bar" style="
-        background: linear-gradient(
-          90deg,
-          rgba(142, 36, 170, 0.5),
-          rgba(216, 27, 96, 0.5)
-        );
-        color: ${titleText === "Error" ? "red" : "white"};
-        padding: 10px;
+        background-color: #f3f4f6;
+        color: black;
+        padding: 8px 10px 5px 10px;
         cursor: move;
         font-weight: bold;
         display: flex;
         justify-content: space-between;
-        align-items: center;
       ">
         <span>${titleText}</span>
         <button class="close-button" style="
           background: none;
           border: none;
-          color: white;
+          color: black;
           font-size: 16px;
           cursor: pointer;
+          margin-left: 10px;
         ">X</button>
       </div>
-      <div class="content-div" style="
-        padding: 20px;
-        color: ${titleText === "Error" ? "red" : "black"};
-        font-size: 14px;
-        line-height: 1.6;
-      "></div>
-    </div>
-  `;
+      <div class="content-div" style="padding: 20px;"></div>
+    `;
 
   // Append popup to document body
   document.body.appendChild(popupDiv);
@@ -95,4 +75,15 @@ export function createPopupDiv(titleText, contentGenerator) {
   if (contentGenerator && typeof contentGenerator === "function") {
     contentGenerator(contentDiv);
   }
+}
+
+// Error popup display function
+export function showErrorPopup(title, message) {
+  createPopupDiv(title, (contentDiv) => {
+      contentDiv.innerHTML = `
+          <p style="color: red; font-size: 14px; margin: 0; line-height: 1.5; padding: 5px 0 10px 0;">
+              ${message}
+          </p>
+      `;
+  });
 }
