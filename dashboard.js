@@ -8,14 +8,16 @@ document.addEventListener("DOMContentLoaded", () => {
     `,
     tutorial: `
       <h3>Steps to get started</h3>
-      <h4>Prerequisites:</h4>
-      <ul>
-        <li>Install and enable the extension in <u>Chrome</u>.</li>
-        <li>Log in to <u>Gmail</u> or <u>Outlook</u>.</li>
-        <li>Open the <u>Compose</u> or <u>Reply</u> window to access features.</li>
-      </ul> 
+      <h4>1. Prerequisites:</h4>
+        <ul>
+          <li>Download and enable the extension in Chrome Dev or Canary Channel. Learn more about <a href="https://www.chromium.org/getting-involved/dev-channel/" target="_blank">Chrome Release Channels</a>.</li>
+          <li>Sign in to your email account on <a href="https://mail.google.com" target="_blank">Gmail</a> or <a href="https://outlook.office365.com" target="_blank">Outlook</a>.</li>
+          <li>Open a Compose or Reply window to use the extension features.</li>
+          <li>Set your email system's language to English, and ensure all inputs are in English.</li>
+        </ul>
 
-      <h4>Features and Button Locations:</h4>
+
+      <h4>2. Features and Button Locations:</h4>
       <div class="feature-name-div">
             <strong class="feature-name">Create Subject</strong>
             <strong class="feature-name">Polish Text</strong>
@@ -47,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
     contact: `
     <h3>Let's Get Connected!</h3>
       <h4>Email</h4>
-      <p><a href="mailto:penpalai@gmail.com">penpalai@gmail.com</a></p>
+        <p><a href="emailpilotteam@gmail.com">emailpilotteam@gmail.com</a></p>
       <h4>GitHub</h4>
       <p><a href="https://github.com/Yaqing-Peng/gmail-ai-extension" target="_blank">GitHub Repository</a></p>
     `,
@@ -103,19 +105,6 @@ document.addEventListener("DOMContentLoaded", () => {
       contentDiv.innerHTML = sections[targetSection];
     });
   });
-
-  // Footer buttons (example interactions)
-  // document.getElementById("footerHome").addEventListener("click", () => {
-  //   alert("Home clicked!");
-  // });
-
-  // document.getElementById("footerRefresh").addEventListener("click", () => {
-  //   alert("Refresh clicked!");
-  // });
-
-  // document.getElementById("footerProfile").addEventListener("click", () => {
-  //   alert("Profile clicked!");
-  // });
 });
 
 document.addEventListener("DOMContentLoaded", () => {
