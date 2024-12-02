@@ -97,6 +97,7 @@ To enable Gemini Nano and Prompt API for local experimentation:
 1. Open Gmail or Outlook in Chrome Canary
 2. Use the extension's buttons (e.g., Auto Write, Polish, Summarize) available in the email interface
 3. Follow on-screen prompts to leverage AI-powered features
+4. You can also follow this video demo: https://youtu.be/zf6XiYL0XJA
 
 ## Known Limitations
 
