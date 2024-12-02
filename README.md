@@ -1,14 +1,14 @@
-# Smart Email Assistant - Chrome Extension
+# EmailPilot - Chrome Extension
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 ## Overview
 
-Smart Email Assistant is a Chrome extension that enhances email productivity on **Gmail** and **Outlook** platforms. It integrates **Google Gemini Nano's built-in AI** to provide intelligent assistance with the following features:
+EmailPilot is a Chrome extension that enhances email productivity on **Gmail** and **Outlook** platforms. It integrates **Google Gemini Nano's built-in AI** to provide intelligent assistance with the following features:
 
 - **Auto-generate Subject Lines**: Automatically create concise and relevant subject lines.
 - **Auto-reply**: Generate thoughtful and context-aware replies with one click.
-- **Auto-write Emails**: Compose complete emails based on your input.
+- **Auto-write Emails**: Compose complete emails based on your instructions.
 - **Polish Text**: Refine email content for professionalism and clarity.
 - **Summarize Emails**: Quickly generate summaries for long emails.
 
@@ -72,8 +72,8 @@ To enable Gemini Nano and Prompt API for local experimentation:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/Yaqing-Peng/gmail-ai-extension.git
-   cd gmail-ai-extension
+   git clone https://github.com/Yaqing-Peng/email-pilot-chrome-extension.git
+   cd email-pilot-chrome-extension
    ```
 
 2. Install dependencies:
@@ -90,11 +90,11 @@ To enable Gemini Nano and Prompt API for local experimentation:
 
 1. Open a new Chrome tab and navigate to `chrome://extensions`
 2. Enable Developer Mode (toggle in the top-right corner)
-3. Click "Load unpacked" and select the project folder (e.g., `gmail-ai-extension/dist`)
+3. Click "Load unpacked" and select the project folder (e.g., `email-pilot-chrome-extension/dist`)
 
 ## How to Use
 
-1. Open Gmail or Outlook in Chrome
+1. Open Gmail or Outlook in Chrome Canary
 2. Use the extension's buttons (e.g., Auto Write, Polish, Summarize) available in the email interface
 3. Follow on-screen prompts to leverage AI-powered features
 
@@ -102,11 +102,11 @@ To enable Gemini Nano and Prompt API for local experimentation:
 
 - This extension is currently designed for desktop platforms only
 - Requires a stable internet connection for optimal performance
-- As an experimental feature, results may vary depending on the task
+- As an experimental feature, results may vary depending on the task. Currently the Prompt API can only perform stably for Eglish. Other languages are untested for stable performance.
 
 ## Feedback and Contribution
 
-We welcome feedback and contributions! Feel free to open issues or submit pull requests in this repository: Yaqing-Peng/gmail-ai-extension.
+We welcome feedback and contributions! Feel free to open issues or submit pull requests in this repository: Yaqing-Peng/email-pilot-chrome-extension.
 
 ## License
 
