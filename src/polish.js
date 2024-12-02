@@ -95,7 +95,7 @@ export function openPolishPromptPopup(emailBodyArea) {
       // Call the API to polish the text
       const polishedText = await callAIPromptAPI(prompt);
       resultTextarea.value =
-        polishedText?.replace(/^Subject:.*$/m, "").trim() || "Error generating polished text.";
+        polishedText?.replace(/^Subject:.*$/m, "").trim() || "";
       
     });
 

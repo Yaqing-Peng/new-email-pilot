@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Close dashboard button
   document.getElementById("closeDashboard").addEventListener("click", () => {
-    window.close(); // Closes the popup window entirely
+    window.close(); 
   });
 
   // Navigation functionality
@@ -104,21 +104,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const contentDiv = document.querySelector(".dashboard-content");
       contentDiv.innerHTML = sections[targetSection];
     });
-  });
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  // Attach event listeners to buttons
-  document.getElementById("autoWrite").addEventListener("click", () => {
-    sendMessageToContentScript({ action: "autoWrite" });
-  });
-
-  document.getElementById("polish").addEventListener("click", () => {
-    sendMessageToContentScript({ action: "polish" });
-  });
-
-  document.getElementById("summarize").addEventListener("click", () => {
-    sendMessageToContentScript({ action: "summarize" });
   });
 });
 

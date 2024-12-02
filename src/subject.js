@@ -2,8 +2,6 @@ import { callAIPromptAPI } from "./prompt-api.js";
 import { showErrorPopup } from "./popup.js";
 import { createButton } from "./button.js";
 
-console.log("Content script loaded.");
-
 let subjectOptions = []; // Array to hold the generated subjects
 let currentIndex = 0; // Current index in the subject options
 
@@ -52,6 +50,7 @@ export function addCreateSubjectButton(subjectArea, subjectInput, emailBodyArea)
             }
         } catch (error) {
             console.error("Error generating subjects:", error);
+            subjectInput.value = "";//clear loading message
         }
     });
 }

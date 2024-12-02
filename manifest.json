@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Gmail Extension Combine",
+  "name": "Email Pilot",
   "version": "1.0",
   "permissions": ["activeTab", "scripting"],
   "host_permissions": [

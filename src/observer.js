@@ -14,8 +14,8 @@ const observer = new MutationObserver((mutations) => {
     if (isGmail) {
       handleMutations(
         {
-          subjectArea: 'input[name="subjectbox"]',
-          subjectInput:'input[name="subjectbox"]',
+          subjectArea: 'input[name="subjectbox"]',//for appending buttons
+          subjectInput:'input[name="subjectbox"]',//for injecting subject lines
           emailBodyArea: ".Am.Al.editable",
           subjectElement: "h2.hP",
           replyArea: "table.IG",
