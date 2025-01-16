@@ -58,7 +58,8 @@ async function generateEmailContent(prompt, subjectInput, emailBodyArea) {
     const [subject, ...bodyParts] = emailContent.split('\n');
 
     // Replace the "Subject:" or "## Subject:" prefix
-    const cleanedSubject = subject.replace(/^(##\s*)?Subject:\s*/, '').trim();
+    //const cleanedSubject = subject.replace(/^(##\s*)?Subject:\s*/, '').trim();
+    const cleanedSubject = subject.replace(/^\*\*Subject:\s*|\*\*$/g, '').trim();
     
     // Join the remaining parts of the email content
     const body = bodyParts.join('\n').trim();

@@ -1,4 +1,5 @@
 import { showErrorPopup } from './popup.js';
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // Error handling function
 async function handleAIError(error, prompt) {
@@ -12,19 +13,36 @@ async function handleAIError(error, prompt) {
     }
 }
 
-// Use AI model to prompt for user input
+
+// set Google API Key
+const API_KEY = "AIzaSyDTN-al14Cq0hGL0R6fH27qUCsHjnXy21Y"; // can be replaced with your API Key
+const genAI = new GoogleGenerativeAI(API_KEY);
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
 export async function callAIPromptAPI(prompt) {
     try {
-        const { available } = await ai.languageModel.capabilities();
-        if (available !== "no") {
-            const session = await ai.languageModel.create();
-            const result = await session.prompt(prompt);
-            return result;
-        } else {
-            console.error("AI model is not available.");
-            showErrorPopup("Error", "AI model is not available. Please try again later.");
-        }
+        const result = await model.generateContent(prompt);
+        console.log(result.response.text());
+        return result.response.text();
     } catch (error) {
         await handleAIError(error, prompt);
     }
 }
+
+
+// Use google gemini nano AI model to prompt for user input
+// export async function callAIPromptAPI(prompt) {
+//     try {
+//         const { available } = await ai.languageModel.capabilities();
+//         if (available !== "no") {
+//             const session = await ai.languageModel.create();
+//             const result = await session.prompt(prompt);
+//             return result;
+//         } else {
+//             console.error("AI model is not available.");
+//             showErrorPopup("Error", "AI model is not available. Please try again later.");
+//         }
+//     } catch (error) {
+//         await handleAIError(error, prompt);
+//     }
+// }
