@@ -1,6 +1,6 @@
-import { callAIPromptAPI } from "./prompt-api.js";
-import { showErrorPopup } from "./popup.js";
-import { createButton } from "./button.js";
+import { callAIPromptAPI } from "./utils/prompt-api.js";
+import { showErrorPopup } from "./utils/popup.js";
+import { createButton } from "./utils/button.js";
 
 let subjectOptions = []; // Array to hold the generated subjects
 let currentIndex = 0; // Current index in the subject options

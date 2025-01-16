@@ -1,7 +1,7 @@
-import { callAIPromptAPI } from './prompt-api.js';
-import { createPopupDiv, showErrorPopup } from './popup.js';
-import { createButton } from './button.js';
-import { getButtonStyle } from './popup-button-style.js';
+import { callAIPromptAPI } from './utils/prompt-api.js';
+import { createPopupDiv, showErrorPopup } from './utils/popup.js';
+import { createButton } from './utils/button.js';
+import { getButtonStyle } from './utils/popup-button-style.js';
 
 export function addAutoWriteButton(subjectArea,subjectInput, emailBodyArea) {
   console.log("Creating auto-write button...")

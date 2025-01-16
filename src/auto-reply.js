@@ -1,5 +1,5 @@
-import { callAIPromptAPI } from './prompt-api.js';
-import { createButton } from './button.js';
+import { callAIPromptAPI } from './utils/prompt-api.js';
+import { createButton } from './utils/button.js';
 
 export function addAutoReplyButton(replyArea, emailBodyArea) {
     console.log("Creating auto-reply button...")

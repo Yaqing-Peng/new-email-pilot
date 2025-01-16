@@ -6,7 +6,8 @@ import { addAutoReplyButton } from './auto-reply.js';
 
 // Detect the current platform (Gmail or Outlook)
 const isGmail = window.location.hostname.includes("mail.google.com");
-const isOutlook = window.location.hostname.includes("outlook.office365.com");
+const outlookDomains = ["outlook.office365.com", "outlook.office.com"];
+const isOutlook = outlookDomains.some(domain => window.location.hostname.includes(domain));
 
 // Initialize MutationObserver to watch for new compose windows or email details
 const observer = new MutationObserver((mutations) => {
@@ -25,7 +26,7 @@ const observer = new MutationObserver((mutations) => {
     } else if (isOutlook) {
       handleMutations(
         {
-          subjectArea: "div.ZMK7F",
+          subjectArea: "div.Ut9Zz",//div.ZMK7F for office365
           subjectInput:'input[aria-label="Add a subject"]',
           emailBodyArea:'div[aria-label="Message body, press Alt+F10 to exit"]', 
           subjectElement: "span.JdFsz",

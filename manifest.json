@@ -5,20 +5,22 @@
   "permissions": ["activeTab", "scripting"],
   "host_permissions": [
     "https://mail.google.com/*",
-    "https://outlook.office365.com/*"
+    "https://outlook.office365.com/*",
+    "https://outlook.office.com/*"
   ],
   "content_scripts": [
     {
       "matches": [
         "https://mail.google.com/*",
-        "https://outlook.office365.com/*"
+        "https://outlook.office365.com/*",
+        "https://outlook.office.com/*"
       ],
       "js": ["dist/bundle.js"],
       "run_at": "document_end"
     }
   ],
   "action": {
-    "default_popup": "dashboard.html",
+    "default_popup": "dashboard/dashboard.html",
     "default_icon": {
       "16": "icon.png",
       "48": "icon.png",
