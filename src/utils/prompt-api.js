@@ -15,7 +15,8 @@ async function handleAIError(error, prompt) {
 
 
 // set Google API Key
-const API_KEY = "AIzaSyDTN-al14Cq0hGL0R6fH27qUCsHjnXy21Y"; // can be replaced with your API Key
+// You can requrst a free API key here: https://ai.google.dev/gemini-api/docs
+const API_KEY = "***"; // Replaced it with your own API Key
 const genAI = new GoogleGenerativeAI(API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
